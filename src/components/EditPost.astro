@@ -3,10 +3,15 @@ import type { CollectionEntry } from "astro:content";
 import IconEdit from "@/assets/icons/IconEdit.svg";
 import { SITE } from "@/config";
 
+type PostEntry =
+  | CollectionEntry<"blog">
+  | CollectionEntry<"notes">
+  | CollectionEntry<"publications">;
+
 type Props = {
-  hideEditPost?: CollectionEntry<"blog">["data"]["hideEditPost"];
+  hideEditPost?: PostEntry["data"]["hideEditPost"];
   class?: string;
-  post: CollectionEntry<"blog">;
+  post: PostEntry;
 };
 
 const { hideEditPost, post, class: className = "" } = Astro.props;

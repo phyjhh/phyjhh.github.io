@@ -1,8 +1,8 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection, z, type ImageFunction } from "astro:content";
 import { glob } from "astro/loaders";
 import { SITE } from "@/config";
 
-const blogSchema = ({ image }) =>
+const blogSchema = ({ image }: { image: ImageFunction }) =>
   z.object({
     author: z.string().default(SITE.author),
     pubDatetime: z.date(),
@@ -18,7 +18,7 @@ const blogSchema = ({ image }) =>
     timezone: z.string().optional(),
   });
 
-const publicationSchema = ({ image }) =>
+const publicationSchema = ({ image }: { image: ImageFunction }) =>
   z.object({
     author: z.string().default(SITE.author),
     pubDatetime: z.date(),
