@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Card from "@/components/Card.astro";
+import getSortedPosts from "@/utils/getSortedPosts";
+
+const posts = await getCollection("publications", ({ data }) => !data.draft);
+const publicationPosts = getSortedPosts(posts);
+---
+
+<Layout>
+  <Header />
+  <main id="main-content" data-layout="publications" class="app-layout">
+    <Breadcrumb />
+    <section id="hero" class="py-8 border-b border-border">
+      <h1 class="text-2xl font-semibold sm:text-3xl">Publications</h1>
+      <p class="mt-2 mb-6 italic">My research papers and publications.</p>
+    </section>
+
+    {
+      publicationPosts.length > 0 ? (
+        <section id="publications" class="py-8">
+          <ul>
+            {publicationPosts.map(data => (
+              <Card variant="h3" {...data} />
+            ))}
+          </ul>
+        </section>
+      ) : (
+        <section id="publications" class="py-8">
+          <p>No publications yet.</p>
+        </section>
+      )
+    }
+  </main>
+  <Footer />
+</Layout>

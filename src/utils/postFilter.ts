@@ -1,7 +1,9 @@
 import type { CollectionEntry } from "astro:content";
 import { SITE } from "@/config";
 
-const postFilter = ({ data }: CollectionEntry<"blog">) => {
+type PostEntry = CollectionEntry<"blog"> | CollectionEntry<"notes"> | CollectionEntry<"publications">;
+
+const postFilter = ({ data }: PostEntry) => {
   const isPublishTimePassed =
     Date.now() >
     new Date(data.pubDatetime).getTime() - SITE.scheduledPostMargin;
