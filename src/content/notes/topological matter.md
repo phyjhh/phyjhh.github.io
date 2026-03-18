@@ -1,1 +1,18 @@
-bGFuZGF1IOinoiDnm67lhoXpmp7nmoTmg73lj6/pm4Yg57uZ5a625piO5LuW55WM6YeN56CU5oC75oCn5a2m6Imv5p625Yqg5Lq6LiDmnInlkajmn5opl67mj6/miJbnrqHliqHlj5Hmj6/miJblh7rlm77liLDkuIcKCiDmnIDlnKjmiJDlroDnu6fkvYbph48vVXNlcnMvcGh5ai9MaWJyYXJ5L0FwcGxpY2F0aW9uIFN1cHBvcnQvdHlwcm9yYS11c2VyLWltYWdlcy9pbWFnZS0yMDI1MTIxMTExNzQwMDEzNjAucG5nPgoK5p625Yqg6Z2i5a625pWw6ZmA546H5pS56L+Q5oC757uZ5a6257uf5pyJ5Lu75LiA5Lq65L625oC7MTAtOTDmmK/lj5HnqLwg6Ze06YCa5aSa5o+Q5a+56L+b5qyh55qE5pys5Zyo6L+Q6Lev5Y+v57O757uf6YeP5pu06Ieq5a6a77yM5Yqg5Lq65oC757uf5LiA57uZ5pyJ5oCn57O757uf6L+Q5oCn6Lev5aSa5aKeCiDlpb3lhazku6XlkajpgqDku6XlkajlkI7lkIjpgL7ov5vli5blj5Hmj6/miJbljYfkvJrnrpfmlofkvYbmgLvlj5Hph48=
+---
+author: phyj
+pubDatetime: 2026-03-18T11:13:24Z
+modDatetime: 2026-03-18T11:13:24Z
+title: Topological Matter
+slug: topological-matter
+featured: false
+draft: false
+description: Topological matter notes
+---
+
+landau 计算了带电粒子在磁场中的能级结构，这美丽的结果也预言非凡的结果。终于，量子霍尔效应被发现，同时让人新奇的不同霍尔电导的态具有相同的对称性，这意味着朗道金兹堡范式在这里失效了。
+
+![image-20251211174001360](/notes/image-20251211174001360.png)
+
+量子化霍尔电导的实验精度已经达到$10^{-9}$,这也预示这霍尔电导受到某种对称性保护,不会因为微小扰动产生涨落
+
+在普通的
