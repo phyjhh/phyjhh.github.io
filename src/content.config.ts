@@ -37,7 +37,7 @@ const publicationSchema = ({ image }: { image: ImageFunction }) =>
   });
 
 const blog = defineCollection({
-  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/blog" }),
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/posts" }),
   schema: blogSchema,
 });
 

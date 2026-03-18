@@ -1,17 +1,12 @@
 ---
 author: phyj
-pubDatetime: 2026-03-18T12:00:00Z
-modDatetime: 2026-03-18T12:00:00Z
+pubDatetime: 2026-03-18T10:12:23Z
+modDatetime: 2026-03-18T10:12:23Z
 title: Majorana 费米子与拓扑超导 · 学习笔记
-slug: majorana-kitaev-notes
+slug: kiteav
 featured: false
 draft: false
-tags:
-  - 物理
-  - 拓扑超导
-  - Majorana
-  - 学习笔记
-description: 基于 Kitaev 2001 年论文的学习笔记整理
+description: Majorana 费米子与拓扑超导 · 学习笔记
 ---
 
 Majorana 费米子与拓扑超导 · 学习笔记
