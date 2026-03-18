@@ -30,8 +30,7 @@ const isActive = (path: string) => {
 </a>
 
 <header
-  class="mx-auto w-full px-6 sm:px-8 lg:px-12 flex flex-col items-center justify-between sm:flex-row"
-  style="max-width: 950px;"
+  class="app-layout flex flex-col items-center justify-between sm:flex-row"
 >
   <div
     id="top-nav-wrap"
@@ -62,14 +61,14 @@ const isActive = (path: string) => {
     </div>
     <nav
       id="nav-menu"
-      class="flex w-full flex-col items-center sm:ms-4 sm:flex-row sm:justify-end sm:gap-x-6 sm:py-0"
+      class="flex w-full flex-col items-center sm:ms-4 sm:w-auto sm:flex-row sm:justify-end sm:py-0"
     >
       <ul
         id="menu-items"
         class:list={[
-          "mt-4 flex flex-wrap justify-center gap-2 sm:mt-0 sm:flex sm:w-auto sm:gap-x-4",
+          "mt-4 flex flex-col items-center gap-2 sm:mt-0 sm:flex sm:flex-row sm:w-auto sm:gap-x-2",
           "[&>li]:flex [&>li]:items-center",
-          "[&>li>a]:block [&>li>a]:px-3 [&>li>a]:py-2 [&>li>a]:text-base [&>li>a]:font-medium [&>li>a]:whitespace-nowrap [&>li>a]:hover:text-accent",
+          "[&>li>a]:block [&>li>a]:px-2 [&>li>a]:py-2 [&>li>a]:text-base [&>li>a]:font-medium [&>li>a]:whitespace-nowrap [&>li>a]:hover:text-accent",
           "hidden",
         ]}
       >
@@ -98,6 +97,7 @@ const isActive = (path: string) => {
             About Me
           </a>
         </li>
+        <li class="w-full sm:w-auto sm:hidden"></li>
         {
           SITE.showArchives && (
             <li>
