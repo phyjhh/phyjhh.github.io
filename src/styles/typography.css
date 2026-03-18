@@ -3,7 +3,9 @@
 @layer base {
   /* ===== Override default Tailwind Typography styles ===== */
   .app-prose {
-    @apply prose;
+    @apply prose font-sans;
+    @apply leading-relaxed;
+    font-feature-settings: "liga" 1, "kern" 1;
 
     h1,
     h2,
@@ -21,10 +23,11 @@
     strong,
     ol,
     ul,
+    li,
     figcaption,
     table,
-    code {
-      @apply text-foreground;
+    blockquote {
+      @apply text-foreground text-[1.05rem];
     }
 
     a {
@@ -40,7 +43,7 @@
     }
 
     hr {
-      @apply border-border;
+      @apply my-4 border-border;
     }
 
     img {
@@ -52,6 +55,7 @@
     }
 
     table {
+      @apply my-4;
       th,
       td {
         @apply border border-border p-2;
@@ -67,7 +71,11 @@
     }
 
     code {
-      @apply rounded bg-muted/75 p-1 wrap-break-word text-foreground before:content-none after:content-none;
+      @apply rounded bg-muted/75 p-1 wrap-break-word text-foreground font-mono before:content-none after:content-none;
+    }
+
+    strong {
+      font-weight: 600;
     }
 
     .astro-code code {
@@ -83,7 +91,17 @@
     }
 
     .prose .katex-display {
-      @apply text-foreground;
+      @apply text-foreground my-6;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .katex {
+      font-size: 1.06em;
+      line-height: 1.35;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
     }
 
     summary {
@@ -97,7 +115,7 @@
 
   /* ===== Code Blocks & Syntax Highlighting ===== */
   .astro-code {
-    @apply flex border bg-(--shiki-light-bg) text-(--shiki-light) outline-border [&_span]:text-(--shiki-light);
+    @apply flex border bg-(--shiki-light-bg) text-(--shiki-light) outline-border font-mono [&_span]:text-(--shiki-light);
   }
 
   html[data-theme="dark"] .astro-code {

@@ -21,14 +21,24 @@ import { SITE } from "@/config";
 
 <script>
   /* Update Search Praam */
+  function getParentPath(pathname: string) {
+    const trimmed =
+      pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
+    const parts = trimmed.split("/").filter(Boolean);
+    if (parts.length <= 1) return "/";
+    return "/" + parts.slice(0, -1).join("/");
+  }
+
   function updateGoBackUrl() {
     const backButton: HTMLAnchorElement | null =
       document.querySelector("#back-button");
 
     const backUrl = sessionStorage.getItem("backUrl");
+    const parentPath = getParentPath(window.location.pathname);
 
-    if (backUrl && backButton) {
-      backButton.href = backUrl;
+    if (backButton) {
+      backButton.href = parentPath;
+      if (parentPath === "/" && backUrl) backButton.href = backUrl;
     }
   }
 
