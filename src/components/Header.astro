@@ -100,11 +100,11 @@ const isActive = (path: string) => {
         <li class="w-full sm:w-auto sm:hidden"></li>
         {
           SITE.showArchives && (
-            <li>
+            <li class="w-full sm:w-auto">
               <LinkButton
                 href="/archives"
                 class:list={[
-                  "focus-outline flex justify-center items-center h-10 w-10 p-2",
+                  "focus-outline flex justify-center items-center h-10 w-full px-2 sm:w-10 sm:px-2",
                   {
                     "active-nav [&>svg]:stroke-accent": isActive("/archives"),
                   },
