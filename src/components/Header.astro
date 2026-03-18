@@ -39,22 +39,19 @@ const isActive = (path: string) => {
       "py-4 sm:py-6",
       "border-b border-border",
       "relative w-full bg-background",
-      "flex items-baseline justify-between sm:items-center",
+      "flex flex-col sm:flex-row sm:items-center sm:justify-between",
     ]}
   >
-    <a
-      href="/"
-      class="absolute py-1 text-2xl leading-8 font-semibold whitespace-nowrap sm:static sm:my-auto sm:text-4xl sm:leading-none"
-    >
-      {SITE.title}
-    </a>
-    <nav
-      id="nav-menu"
-      class="flex w-full flex-col items-center sm:ms-4 sm:flex-row sm:justify-end sm:gap-x-6 sm:py-0"
-    >
+    <div class="flex items-center justify-between w-full sm:w-auto">
+      <a
+        href="/"
+        class="py-1 text-2xl leading-8 font-semibold whitespace-nowrap sm:text-4xl sm:leading-none"
+      >
+        {SITE.title}
+      </a>
       <button
         id="menu-btn"
-        class="focus-outline self-end p-2 sm:hidden"
+        class="focus-outline p-2 sm:hidden"
         aria-label="Open Menu"
         aria-expanded="false"
         aria-controls="menu-items"
@@ -62,6 +59,11 @@ const isActive = (path: string) => {
         <IconX id="close-icon" class="hidden" />
         <IconMenuDeep id="menu-icon" />
       </button>
+    </div>
+    <nav
+      id="nav-menu"
+      class="flex w-full flex-col items-center sm:ms-4 sm:flex-row sm:justify-end sm:gap-x-6 sm:py-0"
+    >
       <ul
         id="menu-items"
         class:list={[
