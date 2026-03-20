@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { slugifyStr } from "@/utils/slugify";
-import { getPath } from "@/utils/getPath";
+import getPath from "@/utils/getPath";
 import Datetime from "./Datetime.astro";
 
 type PostEntry = CollectionEntry<"blog"> | CollectionEntry<"notes"> | CollectionEntry<"publications">;
@@ -10,19 +10,14 @@ type Props = {
   variant?: "h2" | "h3";
 } & PostEntry;
 
-const { variant: Heading = "h2", id, data, filePath, collection } = Astro.props;
+const { variant: Heading = "h2", ...post } = Astro.props;
 
-const { title, description, ...props } = data;
-
-// 根据集合类型确定基础路径
-const basePath = collection === "blog" ? "/posts" : 
-                 collection === "notes" ? "/notes" : 
-                 collection === "publications" ? "/publications" : "/posts";
+const { title, description, ...props } = post.data;
 ---
 
 <li class="my-6">
   <a
-    href={getPath(id, filePath, true, basePath)}
+    href={getPath(post as PostEntry)}
     class:list={[
       "inline-block text-lg font-medium text-accent",
       "decoration-dashed underline-offset-4 hover:underline",
