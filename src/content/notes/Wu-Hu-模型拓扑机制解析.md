@@ -8,7 +8,7 @@ tags:
 ---
 # Wu-Hu 模型拓扑机制解析
 
-## Table of contents
+### Table of contents
 
 **Date**: April 20, 2026 at 12:58 AM
 **Turns**: 6
