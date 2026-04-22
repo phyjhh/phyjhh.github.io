@@ -5,8 +5,13 @@ import IconArrowLeft from "@/assets/icons/IconArrowLeft.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import LinkButton from "./LinkButton.astro";
 
+type PostEntry =
+  | CollectionEntry<"blog">
+  | CollectionEntry<"notes">
+  | CollectionEntry<"publications">;
+
 type Props = {
-  page: Page<CollectionEntry<"blog">>;
+  page: Page<PostEntry>;
 };
 
 const { page } = Astro.props;
