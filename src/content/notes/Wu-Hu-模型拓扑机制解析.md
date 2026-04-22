@@ -1,10 +1,10 @@
 ---
-title: "Wu\-Hu 模型拓扑机制解析"
+title: Wu-Hu 模型拓扑机制解析
 pubDatetime: 2026-04-22T10:24:50Z
 description: "Date: April 20, 2026 at 12:58 AM"
 draft: false
 ---
-# Wu\-Hu 模型拓扑机制解析
+# Wu-Hu 模型拓扑机制解析
 
 **Date**: April 20, 2026 at 12:58 AM
 **Turns**: 6
