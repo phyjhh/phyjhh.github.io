@@ -1,0 +1,24 @@
+---
+import Base from "@/layouts/Base.astro";
+import T from "@/components/T.astro";
+import PortfolioItem from "@/components/PortfolioItem.astro";
+import { UI } from "@/i18n";
+import { getPortfolio } from "@/utils/content";
+
+const items = await getPortfolio();
+---
+
+<Base title={UI.portfolio}>
+  <h1 class="page__title"><T {...UI.portfolio} /></h1>
+  <section class="archive">
+    {
+      items.length > 0 ? (
+        items.map(item => <PortfolioItem item={item} />)
+      ) : (
+        <p>
+          <T {...UI.noPortfolio} />
+        </p>
+      )
+    }
+  </section>
+</Base>

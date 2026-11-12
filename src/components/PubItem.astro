@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from "astro:content";
+import T from "@/components/T.astro";
+import Icon from "@/components/Icon.astro";
+import { UI } from "@/i18n";
+import { citationOf, hasBody, yearOf } from "@/utils/content";
+
+type Props = { pub: CollectionEntry<"publications"> };
+
+const { pub } = Astro.props;
+const { data } = pub;
+const href = hasBody(pub) ? `/publications/${pub.id}/` : (data.pdf ?? data.doi);
+---
+
+<article class="archive__item">
+  <h2 class="archive__item-title">
+    {href ? <a href={href}>{data.title}</a> : data.title}
+  </h2>
+  <p>
+    <T {...UI.publishedIn} />
+    <em>{data.journal}</em>, {yearOf(data.pubDatetime)}
+  </p>
+  {data.description && <p class="archive__item-excerpt">{data.description}</p>}
+  <p class="citation">
+    <strong><T {...UI.citation} /></strong>
+    {citationOf(pub)}
+  </p>
+  {
+    (data.pdf || data.doi) && (
+      <p class="archive__item-links">
+        {data.pdf && (
+          <a href={data.pdf}>
+            <Icon name="pdf" />
+            <T {...UI.downloadPaper} />
+          </a>
+        )}
+        {data.doi && (
+          <a href={data.doi}>
+            <Icon name="link" />
+            DOI
+          </a>
+        )}
+      </p>
+    )
+  }
+</article>

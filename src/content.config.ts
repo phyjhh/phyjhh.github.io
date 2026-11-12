@@ -31,9 +31,26 @@ const publications = defineCollection({
     doi: optional(z.string().url()),
     /** Link to a PDF or arXiv page. */
     pdf: optional(z.string().url()),
+    /** Shown as "Recommended citation"; generated from the fields when empty. */
+    citation: optional(z.string()),
     description: optional(z.string()),
     draft: z.boolean().default(false),
   }),
 });
 
-export const collections = { blog, publications };
+const portfolio = defineCollection({
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/portfolio" }),
+  schema: z.object({
+    title: z.string(),
+    description: optional(z.string()),
+    pubDatetime: z.coerce.date(),
+    /** External project page, e.g. a GitHub repository. */
+    link: optional(z.string().url()),
+    /** Teaser image path, e.g. /images/project.png */
+    image: optional(z.string()),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { blog, publications, portfolio };

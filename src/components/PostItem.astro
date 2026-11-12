@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from "astro:content";
+import T from "@/components/T.astro";
+import Icon from "@/components/Icon.astro";
+import { readTime } from "@/i18n";
+import { formatDate, readingMinutes } from "@/utils/content";
+
+type Props = { post: CollectionEntry<"blog"> };
+
+const { post } = Astro.props;
+const { title, description, pubDatetime } = post.data;
+---
+
+<article class="archive__item">
+  <h2 class="archive__item-title">
+    <a href={`/blog/${post.id}/`} rel="permalink">{title}</a>
+  </h2>
+  <p class="page__meta">
+    <span>
+      <Icon name="calendar" />
+      <time datetime={pubDatetime.toISOString()}>{formatDate(pubDatetime)}</time
+      >
+    </span>
+    <span>
+      <Icon name="clock" />
+      <T {...readTime(readingMinutes(post.body))} />
+    </span>
+  </p>
+  {description && <p class="archive__item-excerpt">{description}</p>}
+</article>

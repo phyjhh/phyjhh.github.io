@@ -1,0 +1,57 @@
+---
+/**
+ * Font Awesome Free icons (CC BY 4.0), inlined at build time.
+ * The licence comment inside each SVG is kept as the attribution.
+ */
+import github from "@fortawesome/fontawesome-free/svgs/brands/github.svg?raw";
+import zhihu from "@fortawesome/fontawesome-free/svgs/brands/zhihu.svg?raw";
+import x from "@fortawesome/fontawesome-free/svgs/brands/x-twitter.svg?raw";
+import linkedin from "@fortawesome/fontawesome-free/svgs/brands/linkedin.svg?raw";
+import orcid from "@fortawesome/fontawesome-free/svgs/brands/orcid.svg?raw";
+import scholar from "@fortawesome/fontawesome-free/svgs/brands/google-scholar.svg?raw";
+import email from "@fortawesome/fontawesome-free/svgs/solid/envelope.svg?raw";
+import website from "@fortawesome/fontawesome-free/svgs/solid/globe.svg?raw";
+import location from "@fortawesome/fontawesome-free/svgs/solid/location-dot.svg?raw";
+import affiliation from "@fortawesome/fontawesome-free/svgs/solid/building-columns.svg?raw";
+import sun from "@fortawesome/fontawesome-free/svgs/solid/sun.svg?raw";
+import moon from "@fortawesome/fontawesome-free/svgs/solid/moon.svg?raw";
+import clock from "@fortawesome/fontawesome-free/svgs/solid/clock.svg?raw";
+import calendar from "@fortawesome/fontawesome-free/svgs/solid/calendar-days.svg?raw";
+import bars from "@fortawesome/fontawesome-free/svgs/solid/bars.svg?raw";
+import link from "@fortawesome/fontawesome-free/svgs/solid/link.svg?raw";
+import pdf from "@fortawesome/fontawesome-free/svgs/solid/file-pdf.svg?raw";
+import external from "@fortawesome/fontawesome-free/svgs/solid/arrow-up-right-from-square.svg?raw";
+
+export const ICONS = {
+  github,
+  zhihu,
+  x,
+  linkedin,
+  orcid,
+  scholar,
+  email,
+  website,
+  location,
+  affiliation,
+  sun,
+  moon,
+  clock,
+  calendar,
+  bars,
+  link,
+  pdf,
+  external,
+};
+
+export type IconName = keyof typeof ICONS;
+
+type Props = { name: string; class?: string };
+
+const { name, class: className } = Astro.props;
+const svg = (ICONS[name as IconName] ?? ICONS.link).replace(
+  "<svg",
+  '<svg aria-hidden="true" focusable="false"'
+);
+---
+
+<span class:list={["icon", `icon--${name}`, className]} set:html={svg} />

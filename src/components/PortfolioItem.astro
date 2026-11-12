@@ -1,0 +1,35 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Icon from "@/components/Icon.astro";
+import { hasBody } from "@/utils/content";
+
+type Props = { item: CollectionEntry<"portfolio"> };
+
+const { item } = Astro.props;
+const { title, description, link, image } = item.data;
+const page = hasBody(item) ? `/portfolio/${item.id}/` : undefined;
+const href = page ?? link;
+---
+
+<article class:list={["archive__item", { "archive__item--teaser": image }]}>
+  {
+    image && (
+      <a href={href} class="archive__item-teaser" tabindex="-1">
+        <img src={image} alt="" loading="lazy" decoding="async" />
+      </a>
+    )
+  }
+  <div>
+    <h2 class="archive__item-title">
+      {href ? <a href={href}>{title}</a> : title}
+      {
+        page && link && (
+          <a href={link} class="archive__item-external" aria-label={link}>
+            <Icon name="external" />
+          </a>
+        )
+      }
+    </h2>
+    {description && <p class="archive__item-excerpt">{description}</p>}
+  </div>
+</article>

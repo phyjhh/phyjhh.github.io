@@ -1,7 +1,7 @@
 ---
 import Base from "@/layouts/Base.astro";
 import T from "@/components/T.astro";
-import PostList from "@/components/PostList.astro";
+import PostItem from "@/components/PostItem.astro";
 import { UI } from "@/i18n";
 import { getPosts, yearOf } from "@/utils/content";
 
@@ -15,19 +15,21 @@ for (const post of posts) {
 ---
 
 <Base title={UI.blog}>
-  <h1><T {...UI.blog} /></h1>
+  <h1 class="page__title"><T {...UI.blog} /></h1>
   {
     posts.length === 0 && (
-      <p class="muted">
+      <p>
         <T {...UI.noPosts} />
       </p>
     )
   }
   {
     [...byYear].map(([year, list]) => (
-      <section>
-        <h2 class="year">{year}</h2>
-        <PostList posts={list} />
+      <section class="archive">
+        <h2 class="archive__subtitle">{year}</h2>
+        {list.map(post => (
+          <PostItem post={post} />
+        ))}
       </section>
     ))
   }
