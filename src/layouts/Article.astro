@@ -85,22 +85,28 @@ const showUpdated = updated && formatDate(updated) !== formatDate(date);
       (prev || next) && (
         <nav class="pagination">
           {prev ? (
-            <a href={prev.href} class="pagination--pager" title={prev.title}>
-              <T {...UI.previous} />
+            <a href={prev.href} class="pagination--pager" rel="prev">
+              <span class="pagination__label">
+                ← <T {...UI.previous} />
+              </span>
+              <span class="pagination__title">{prev.title}</span>
             </a>
           ) : (
-            <span class="pagination--pager disabled">
-              <T {...UI.previous} />
-            </span>
+            <span class="pagination--pager disabled" aria-hidden="true" />
           )}
           {next ? (
-            <a href={next.href} class="pagination--pager" title={next.title}>
-              <T {...UI.next} />
+            <a
+              href={next.href}
+              class="pagination--pager pagination--next"
+              rel="next"
+            >
+              <span class="pagination__label">
+                <T {...UI.next} /> →
+              </span>
+              <span class="pagination__title">{next.title}</span>
             </a>
           ) : (
-            <span class="pagination--pager disabled">
-              <T {...UI.next} />
-            </span>
+            <span class="pagination--pager disabled" aria-hidden="true" />
           )}
         </nav>
       )
