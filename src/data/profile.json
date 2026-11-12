@@ -1,0 +1,75 @@
+{
+  "name": { "zh": "phyj", "en": "phyj" },
+  "tagline": {
+    "zh": "凝聚态物理 · 拓扑物态与拓扑超导",
+    "en": "Condensed matter physics · Topological phases and superconductivity"
+  },
+  "affiliation": { "zh": "", "en": "" },
+  "bio": {
+    "zh": [
+      "你好，我是 phyj。我关注凝聚态物理，尤其是拓扑物态、拓扑超导与 Majorana 费米子。",
+      "这里放着我的学习笔记、论文和简历。"
+    ],
+    "en": [
+      "Hi, I'm phyj. I'm interested in condensed matter physics, especially topological phases of matter, topological superconductivity and Majorana fermions.",
+      "This site collects my notes, publications and CV."
+    ]
+  },
+  "links": [
+    {
+      "label": { "zh": "GitHub", "en": "GitHub" },
+      "url": "https://github.com/phyjhh"
+    },
+    {
+      "label": { "zh": "知乎", "en": "Zhihu" },
+      "url": "https://www.zhihu.com/people/qian-mo-29-33"
+    },
+    { "label": { "zh": "X", "en": "X" }, "url": "https://x.com/phyj19" },
+    {
+      "label": { "zh": "LinkedIn", "en": "LinkedIn" },
+      "url": "https://www.linkedin.com/in/luyicyj/"
+    },
+    {
+      "label": { "zh": "邮箱", "en": "Email" },
+      "url": "mailto:luyicyj@gmail.com"
+    }
+  ],
+  "cv": {
+    "pdf": "",
+    "sections": [
+      {
+        "title": { "zh": "教育经历", "en": "Education" },
+        "items": [
+          {
+            "period": "20XX – 20XX",
+            "title": { "zh": "（学位 · 专业）", "en": "(Degree · Major)" },
+            "detail": { "zh": "（学校名称）", "en": "(University)" }
+          }
+        ]
+      },
+      {
+        "title": { "zh": "研究经历", "en": "Research Experience" },
+        "items": [
+          {
+            "period": "20XX – 20XX",
+            "title": { "zh": "（课题名称）", "en": "(Project title)" },
+            "detail": { "zh": "（导师 / 课题组）", "en": "(Advisor / Group)" }
+          }
+        ]
+      },
+      {
+        "title": { "zh": "技能", "en": "Skills" },
+        "items": [
+          {
+            "period": "",
+            "title": { "zh": "编程", "en": "Programming" },
+            "detail": {
+              "zh": "Python, Julia, Mathematica",
+              "en": "Python, Julia, Mathematica"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

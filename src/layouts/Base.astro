@@ -1,0 +1,80 @@
+---
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { SITE } from "@/config";
+import type { Bi } from "@/i18n";
+import "@/styles/global.css";
+
+type Props = {
+  /** Page title. Bilingual titles follow the language switch. */
+  title?: string | Bi;
+  description?: string;
+};
+
+const { title, description = SITE.description } = Astro.props;
+
+const withSite = (t: string) => (t ? `${t} · ${SITE.title}` : SITE.title);
+const titleZh = withSite(typeof title === "string" ? title : (title?.zh ?? ""));
+const titleEn = withSite(typeof title === "string" ? title : (title?.en ?? ""));
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html
+  lang="zh-CN"
+  data-lang="zh"
+  data-title-zh={titleZh}
+  data-title-en={titleEn}
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titleZh}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:title" content={titleZh} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline>
+      // Pick the interface language before first paint: saved choice, else the browser's.
+      (function () {
+        const d = document.documentElement;
+        window.setLang = function (lang, save) {
+          d.dataset.lang = lang;
+          d.lang = lang === "zh" ? "zh-CN" : "en";
+          document.title =
+            lang === "zh" ? d.dataset.titleZh : d.dataset.titleEn;
+          if (save) {
+            try {
+              localStorage.setItem("lang", lang);
+            } catch {
+              // Storage can be blocked; the choice just is not remembered.
+            }
+          }
+        };
+        let saved;
+        try {
+          saved = localStorage.getItem("lang");
+        } catch {
+          // Storage can be blocked; fall back to the browser language.
+        }
+        if (saved !== "zh" && saved !== "en") {
+          saved = /^zh\b/i.test(navigator.language || "") ? "zh" : "en";
+        }
+        window.setLang(saved, false);
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <Header />
+      <main>
+        <slot />
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>

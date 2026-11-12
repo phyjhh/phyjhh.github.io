@@ -6,7 +6,7 @@ title: 我的第一篇论文
 journal: Journal of Machine Learning Research
 doi: https://doi.org/10.1234/example.2025.001
 featured: false
-draft: false
+draft: true
 description: 这是一篇关于机器学习的研究论文
 ---
 
