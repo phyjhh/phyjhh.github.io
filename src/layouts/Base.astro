@@ -10,9 +10,11 @@ type Props = {
   /** Page title. Bilingual titles follow the language switch. */
   title?: string | Bi;
   description?: string;
+  /** "page" for single pages, "archive" for wider list pages. */
+  layout?: "page" | "archive";
 };
 
-const { title, description = SITE.description } = Astro.props;
+const { title, description = SITE.description, layout = "page" } = Astro.props;
 
 const withSite = (t: string) => (t ? `${t} · ${SITE.title}` : SITE.title);
 const titleZh = withSite(typeof title === "string" ? title : (title?.zh ?? ""));
@@ -92,7 +94,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <Masthead />
     <div id="main">
       <Sidebar />
-      <main class="page" id="content">
+      <main class={layout} id="content">
         <slot />
       </main>
     </div>

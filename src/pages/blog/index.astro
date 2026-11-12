@@ -14,7 +14,7 @@ for (const post of posts) {
 }
 ---
 
-<Base title={UI.blog}>
+<Base title={UI.blog} layout="archive">
   <h1 class="page__title"><T {...UI.blog} /></h1>
   {
     posts.length === 0 && (
@@ -25,7 +25,7 @@ for (const post of posts) {
   }
   {
     [...byYear].map(([year, list]) => (
-      <section class="archive">
+      <section>
         <h2 class="archive__subtitle">{year}</h2>
         {list.map(post => (
           <PostItem post={post} />

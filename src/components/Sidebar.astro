@@ -1,12 +1,11 @@
 ---
-/** Author profile: avatar, name, bio, location, affiliation and links. */
+/** Author profile, laid out like AcademicPages' author-profile include. */
 import T from "@/components/T.astro";
 import Icon from "@/components/Icon.astro";
 import { profile, hasText } from "@/utils/profile";
 import { UI } from "@/i18n";
 
 const { name, avatar, bio, location, affiliation, links } = profile;
-const has = hasText;
 const external = (url: string) => /^https?:/.test(url);
 ---
 
@@ -28,59 +27,57 @@ const external = (url: string) => /^https?:/.test(url);
     <div class="author__content">
       <h3 class="author__name"><T {...name} /></h3>
       {
-        has(bio) && (
+        hasText(bio) && (
           <p class="author__bio">
             <T {...bio} />
           </p>
         )
       }
     </div>
-    <button
-      type="button"
-      class="btn follow-btn"
-      id="follow-toggle"
-      aria-expanded="false"
-      aria-controls="author-urls"
-    >
-      <T {...UI.follow} />
-    </button>
+    <div class="author__urls-wrapper">
+      <button
+        type="button"
+        class="btn btn--inverse follow-btn"
+        id="follow-toggle"
+        aria-expanded="false"
+        aria-controls="author-urls"
+      >
+        <T {...UI.follow} />
+      </button>
+      <ul class="author__urls" id="author-urls">
+        {
+          hasText(location) && (
+            <li class="author__desktop">
+              <Icon name="location" class="icon--pad" />
+              <T {...location} />
+            </li>
+          )
+        }
+        {
+          hasText(affiliation) && (
+            <li class="author__desktop">
+              <Icon name="affiliation" class="icon--pad" />
+              <T {...affiliation} />
+            </li>
+          )
+        }
+        {
+          links.map(link => (
+            <li>
+              <a
+                href={link.url}
+                rel={external(link.url) ? "me noopener" : undefined}
+                target={external(link.url) ? "_blank" : undefined}
+              >
+                <Icon name={link.icon} class="icon--pad" />
+                <T {...link.label} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
   </div>
-  <ul class="author__urls" id="author-urls">
-    {
-      has(location) && (
-        <li>
-          <span>
-            <Icon name="location" />
-            <T {...location} />
-          </span>
-        </li>
-      )
-    }
-    {
-      has(affiliation) && (
-        <li>
-          <span>
-            <Icon name="affiliation" />
-            <T {...affiliation} />
-          </span>
-        </li>
-      )
-    }
-    {
-      links.map(link => (
-        <li>
-          <a
-            href={link.url}
-            rel={external(link.url) ? "me noopener" : undefined}
-            target={external(link.url) ? "_blank" : undefined}
-          >
-            <Icon name={link.icon} />
-            <T {...link.label} />
-          </a>
-        </li>
-      ))
-    }
-  </ul>
 </aside>
 
 <script is:inline>

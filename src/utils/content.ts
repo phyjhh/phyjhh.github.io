@@ -36,6 +36,20 @@ export const formatDate = (date: Date) =>
 
 export const yearOf = (date: Date) => formatDate(date).slice(0, 4);
 
+/** "2026年4月27日" / "April 27, 2026" in the site's time zone. */
+export const formatLongDate = (date: Date) => {
+  const [y, m, d] = formatDate(date).split("-").map(Number);
+  return {
+    zh: `${y}年${m}月${d}日`,
+    en: date.toLocaleDateString("en-US", {
+      timeZone: SITE.timezone,
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }),
+  };
+};
+
 /**
  * Reading time in minutes: ~400 Chinese characters or ~200 English words a
  * minute. Formulas and code are left out of the count.

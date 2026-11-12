@@ -1,9 +1,10 @@
 ---
+/** A post in a list, like AcademicPages' archive-single include. */
 import type { CollectionEntry } from "astro:content";
 import T from "@/components/T.astro";
 import Icon from "@/components/Icon.astro";
-import { readTime } from "@/i18n";
-import { formatDate, readingMinutes } from "@/utils/content";
+import { UI, readTime } from "@/i18n";
+import { formatLongDate, readingMinutes } from "@/utils/content";
 
 type Props = { post: CollectionEntry<"blog"> };
 
@@ -16,15 +17,14 @@ const { title, description, pubDatetime } = post.data;
     <a href={`/blog/${post.id}/`} rel="permalink">{title}</a>
   </h2>
   <p class="page__meta">
-    <span>
-      <Icon name="calendar" />
-      <time datetime={pubDatetime.toISOString()}>{formatDate(pubDatetime)}</time
-      >
-    </span>
-    <span>
-      <Icon name="clock" />
-      <T {...readTime(readingMinutes(post.body))} />
-    </span>
+    <Icon name="clock" />
+    <T {...readTime(readingMinutes(post.body))} />
+  </p>
+  <p class="page__date">
+    <strong><Icon name="calendar" /> <T {...UI.published} /></strong>
+    <time datetime={pubDatetime.toISOString()}
+      ><T {...formatLongDate(pubDatetime)} /></time
+    >
   </p>
   {description && <p class="archive__item-excerpt">{description}</p>}
 </article>
