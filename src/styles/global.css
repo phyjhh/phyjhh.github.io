@@ -231,7 +231,13 @@ img {
 .masthead__inner-wrap {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0.5em 1em;
+  padding: 0.6em 1em;
+}
+
+@media (min-width: 925px) {
+  .masthead__inner-wrap {
+    padding: 0.85em 1em;
+  }
 }
 
 .greedy-nav {
@@ -255,8 +261,10 @@ img {
 }
 
 .masthead__title {
-  margin-right: 1rem;
+  margin-right: 1.75rem;
+  font-size: 1.1em;
   font-weight: bold;
+  letter-spacing: 0.01em;
 }
 
 .visible-links {
@@ -268,7 +276,7 @@ img {
 }
 
 .visible-links a {
-  margin: 0 1rem;
+  margin: 0 1.4rem;
   /* Same height whether or not the item is selected. */
   border-bottom: 2px solid transparent;
 }
@@ -316,18 +324,18 @@ html[data-lang="en"] .visible-links a::after {
 .masthead__tools {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.6rem;
   margin-left: auto;
 }
 
 .nav-btn {
   display: inline-flex;
   align-items: center;
-  height: 2rem;
-  padding: 0 0.5rem;
+  height: 2.2rem;
+  padding: 0 0.65rem;
   color: var(--masthead-link);
   font: inherit;
-  font-size: 0.8em;
+  font-size: 0.85em;
   background: none;
   border: 1px solid transparent;
   border-radius: 4px;
@@ -431,8 +439,8 @@ html[data-theme="dark"] .theme-icon--dark {
 @media (min-width: 925px) {
   #main {
     display: grid;
-    grid-template-columns: clamp(170px, 17%, 250px) minmax(0, 1fr);
-    column-gap: 4%;
+    grid-template-columns: clamp(190px, 19%, 260px) minmax(0, 1fr);
+    column-gap: 4.5%;
   }
 
   .page {
@@ -466,8 +474,8 @@ html[data-theme="dark"] .theme-icon--dark {
 
 .author__bio {
   margin: 0.25em 0 0;
-  font-size: 0.75em;
-  line-height: 1.5;
+  font-size: 0.8em;
+  line-height: 1.6;
 }
 
 .author__urls {
@@ -475,7 +483,7 @@ html[data-theme="dark"] .theme-icon--dark {
   margin: 0.75em 0 0;
   padding: 10px;
   list-style: none;
-  font-size: 0.75em;
+  font-size: 0.85em;
   line-height: 1.5;
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -490,8 +498,8 @@ html[data-theme="dark"] .theme-icon--dark {
 .author__urls > li > span {
   display: flex;
   align-items: center;
-  gap: 0.35em;
-  margin-bottom: 5px;
+  gap: 0.6em;
+  margin-bottom: 0.55em;
   padding: 2px 5px 2px 0;
   color: inherit;
   text-decoration: none;
@@ -521,13 +529,18 @@ html[data-theme="dark"] .theme-icon--dark {
   color: var(--scholar);
 }
 
-@media (min-width: 925px) {
+/* Keep the profile in view while scrolling, but only when the window is
+   tall enough to show all of it (no scrollbar inside the sidebar). */
+@media (min-width: 925px) and (min-height: 760px) {
   .sidebar {
     position: sticky;
-    top: 5rem;
+    top: 6rem;
+  }
+}
+
+@media (min-width: 925px) {
+  .sidebar {
     align-self: start;
-    max-height: calc(100vh - 6rem);
-    overflow-y: auto;
   }
 
   .author {
@@ -544,11 +557,13 @@ html[data-theme="dark"] .theme-icon--dark {
   }
 
   .author__name {
-    margin: 10px 0;
+    margin: 1em 0 0.4em;
+    font-size: 1.2em;
   }
 
   .author__bio {
-    margin: 10px 0 20px;
+    margin: 0 0 1.6em;
+    font-size: 0.85em;
   }
 
   .follow-btn {
@@ -634,6 +649,19 @@ html[data-theme="dark"] .theme-icon--dark {
 
 .publication-meta p {
   margin: 0 0 0.35em;
+}
+
+.page__content {
+  line-height: 1.75;
+}
+
+.page__content li {
+  margin-bottom: 0.35em;
+}
+
+.page__content li > ul,
+.page__content li > ol {
+  margin-top: 0.35em;
 }
 
 .page__content h2 {
