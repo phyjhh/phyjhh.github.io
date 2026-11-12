@@ -82,6 +82,9 @@ html[data-lang="en"] .zh {
 html {
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
+  /* Always reserve the scrollbar's space, so short and long pages have the
+     same width and the layout doesn't jump between them. */
+  scrollbar-gutter: stable;
   background: var(--bg);
   scroll-padding-top: 4.5rem;
 }
@@ -266,6 +269,25 @@ img {
 
 .visible-links a {
   margin: 0 1rem;
+  /* Same height whether or not the item is selected. */
+  border-bottom: 2px solid transparent;
+}
+
+/* An invisible bold copy of the label reserves the bold width, so
+   selecting an item doesn't push the others sideways. */
+.visible-links a::after {
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: bold;
+  content: attr(data-zh);
+  content: attr(data-zh) / "";
+}
+
+html[data-lang="en"] .visible-links a::after {
+  content: attr(data-en);
+  content: attr(data-en) / "";
 }
 
 /* Hover bar that grows under a menu item. */
@@ -288,7 +310,7 @@ img {
 .visible-links a.selected {
   color: var(--text);
   font-weight: bold;
-  border-bottom: 2px solid var(--text);
+  border-bottom-color: var(--text);
 }
 
 .masthead__tools {
@@ -387,8 +409,9 @@ html[data-theme="dark"] .theme-icon--dark {
     background: var(--border);
   }
 
+  .visible-links a,
   .visible-links a.selected {
-    border-bottom: 0;
+    border-bottom-color: transparent;
   }
 }
 

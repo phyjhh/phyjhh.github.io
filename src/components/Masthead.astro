@@ -29,6 +29,8 @@ const isActive = (href: string) => path.startsWith(href.replace(/\/$/, ""));
               <a
                 href={href}
                 class:list={{ selected: isActive(href) }}
+                data-zh={label.zh}
+                data-en={label.en}
                 aria-current={isActive(href) ? "page" : undefined}
               >
                 <T {...label} />
