@@ -14,3 +14,6 @@
 
 # Your own writing is not reformatted
 /src/content
+
+# Written by the CMS in its own formatting
+/src/data
