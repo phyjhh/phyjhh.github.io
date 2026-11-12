@@ -1,38 +1,54 @@
 {
   "name": { "zh": "phyj", "en": "phyj" },
-  "tagline": {
+  "avatar": "/images/avatar.png",
+  "bio": {
     "zh": "凝聚态物理 · 拓扑物态与拓扑超导",
     "en": "Condensed matter physics · Topological phases and superconductivity"
   },
+  "location": { "zh": "", "en": "" },
   "affiliation": { "zh": "", "en": "" },
-  "bio": {
-    "zh": [
-      "你好，我是 phyj。我关注凝聚态物理，尤其是拓扑物态、拓扑超导与 Majorana 费米子。",
-      "这里放着我的学习笔记、论文和简历。"
-    ],
-    "en": [
-      "Hi, I'm phyj. I'm interested in condensed matter physics, especially topological phases of matter, topological superconductivity and Majorana fermions.",
-      "This site collects my notes, publications and CV."
-    ]
-  },
   "links": [
     {
+      "icon": "github",
       "label": { "zh": "GitHub", "en": "GitHub" },
       "url": "https://github.com/phyjhh"
     },
     {
+      "icon": "zhihu",
       "label": { "zh": "知乎", "en": "Zhihu" },
       "url": "https://www.zhihu.com/people/qian-mo-29-33"
     },
-    { "label": { "zh": "X", "en": "X" }, "url": "https://x.com/phyj19" },
     {
+      "icon": "x",
+      "label": { "zh": "X", "en": "X" },
+      "url": "https://x.com/phyj19"
+    },
+    {
+      "icon": "linkedin",
       "label": { "zh": "LinkedIn", "en": "LinkedIn" },
       "url": "https://www.linkedin.com/in/luyicyj/"
     },
     {
+      "icon": "email",
       "label": { "zh": "邮箱", "en": "Email" },
       "url": "mailto:luyicyj@gmail.com"
     }
+  ],
+  "about": {
+    "zh": [
+      "你好，我是 phyj。我关注凝聚态物理，尤其是拓扑物态、拓扑超导与 Majorana 费米子。",
+      "这里放着我的学习笔记、论文、项目和简历。"
+    ],
+    "en": [
+      "Hi, I'm phyj. I'm interested in condensed matter physics, especially topological phases of matter, topological superconductivity and Majorana fermions.",
+      "This site collects my notes, publications, projects and CV."
+    ]
+  },
+  "interests": [
+    { "zh": "拓扑超导", "en": "Topological superconductivity" },
+    { "zh": "Majorana 费米子", "en": "Majorana fermions" },
+    { "zh": "拓扑物态", "en": "Topological phases of matter" },
+    { "zh": "费米液体理论", "en": "Fermi liquid theory" }
   ],
   "cv": {
     "pdf": "",

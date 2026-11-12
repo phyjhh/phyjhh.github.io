@@ -1,9 +1,35 @@
 ---
-import profile from "@/data/profile.json";
 import T from "@/components/T.astro";
+import Icon from "@/components/Icon.astro";
+import { profile } from "@/utils/profile";
+import { UI } from "@/i18n";
 ---
 
-<footer class="site-footer">
-  © {new Date().getFullYear()}
-  <T {...profile.name} />
-</footer>
+<div class="page__footer">
+  <footer>
+    <div class="page__footer-follow">
+      <ul>
+        <li>
+          <strong><T {...UI.follow} />:</strong>
+        </li>
+        {
+          profile.links.map(link => (
+            <li>
+              <a href={link.url}>
+                <Icon name={link.icon} />
+                <T {...link.label} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="page__footer-copyright">
+      © {new Date().getFullYear()}
+      <T {...profile.name} /> · <T {...UI.builtWith} />
+      <a href="https://github.com/academicpages/academicpages.github.io"
+        >AcademicPages</a
+      >
+    </div>
+  </footer>
+</div>

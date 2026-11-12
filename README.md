@@ -1,20 +1,21 @@
 # phyjhh.github.io
 
-Personal homepage built with [Astro](https://astro.build/), deployed to GitHub Pages on every push to `main`.
+Academic personal homepage built with [Astro](https://astro.build/), deployed to GitHub Pages on every push to `main`. The layout (top navigation, author sidebar, archive lists) is adapted from [AcademicPages](https://github.com/academicpages/academicpages.github.io) (MIT); icons are [Font Awesome Free](https://fontawesome.com/license/free) (CC BY 4.0).
 
 ## Where things live
 
-| What                                      | File                                     |
-| ----------------------------------------- | ---------------------------------------- |
-| Name, intro, links, CV (both languages)   | `src/data/profile.json`                  |
-| Blog posts / notes (Markdown, LaTeX)      | `src/content/blog/*.md`                  |
-| Publications                              | `src/content/publications/*.md`          |
-| Images used in posts                      | `public/notes/` → link as `/notes/x.png` |
-| Interface text (nav, buttons) in zh / en  | `src/i18n.ts`                            |
-| Site title, time zone, home page settings | `src/config.ts`                          |
-| Styles                                    | `src/styles/global.css`                  |
+| What                                                     | File                            |
+| -------------------------------------------------------- | ------------------------------- |
+| Sidebar (avatar, bio, location, links), About page, CV   | `src/data/profile.json`         |
+| Blog posts / notes (Markdown, LaTeX)                     | `src/content/blog/*.md`         |
+| Publications                                             | `src/content/publications/*.md` |
+| Portfolio projects                                       | `src/content/portfolio/*.md`    |
+| Images (avatar, uploads) → link as `/images/x.png`       | `public/images/`                |
+| Interface text (nav, buttons) in zh / en                 | `src/i18n.ts`                   |
+| Site title, time zone, number of posts on the About page | `src/config.ts`                 |
+| Styles and colours (light / dark)                        | `src/styles/global.css`         |
 
-The interface switches between 中文 and English with the button in the header. Posts and papers are shown as written.
+The header has a 中文 / English switch and a light / dark switch (default: follow the system). Posts, papers and projects are shown as written.
 
 ## Admin panel (`/admin/`)
 
@@ -66,6 +67,23 @@ pdf: https://arxiv.org/abs/xxxx.xxxxx
 ---
 
 Optional abstract. If there is text here the title links to its own page.
+```
+
+## Adding a portfolio project
+
+Create `src/content/portfolio/my-project.md`:
+
+```md
+---
+title: Project name
+description: One-line summary shown in the list
+pubDatetime: 2026-01-01T00:00:00Z
+link: https://github.com/phyjhh/my-project
+image: /images/my-project.png
+draft: false
+---
+
+Optional details. With text here the project gets its own page; without it the title links to `link`.
 ```
 
 ## Commands

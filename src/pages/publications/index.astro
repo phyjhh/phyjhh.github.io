@@ -1,7 +1,7 @@
 ---
 import Base from "@/layouts/Base.astro";
 import T from "@/components/T.astro";
-import PubList from "@/components/PubList.astro";
+import PubItem from "@/components/PubItem.astro";
 import { UI } from "@/i18n";
 import { getPublications } from "@/utils/content";
 
@@ -9,14 +9,16 @@ const pubs = await getPublications();
 ---
 
 <Base title={UI.publications}>
-  <h1><T {...UI.publications} /></h1>
-  {
-    pubs.length > 0 ? (
-      <PubList pubs={pubs} />
-    ) : (
-      <p class="muted">
-        <T {...UI.noPublications} />
-      </p>
-    )
-  }
+  <h1 class="page__title"><T {...UI.publications} /></h1>
+  <section class="archive">
+    {
+      pubs.length > 0 ? (
+        pubs.map(pub => <PubItem pub={pub} />)
+      ) : (
+        <p>
+          <T {...UI.noPublications} />
+        </p>
+      )
+    }
+  </section>
 </Base>

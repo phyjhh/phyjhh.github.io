@@ -1,13 +1,15 @@
 ---
 import { render, type CollectionEntry } from "astro:content";
 import Article from "@/layouts/Article.astro";
+import T from "@/components/T.astro";
+import Icon from "@/components/Icon.astro";
 import { UI } from "@/i18n";
-import { getPublications } from "@/utils/content";
+import { citationOf, getPublications, hasBody } from "@/utils/content";
 
 export async function getStaticPaths() {
   const pubs = await getPublications();
   return pubs
-    .filter(pub => pub.body?.trim())
+    .filter(hasBody)
     .map(pub => ({ params: { slug: pub.id }, props: { pub } }));
 }
 
@@ -22,34 +24,35 @@ const { Content } = await render(pub);
   title={data.title}
   description={data.description}
   date={data.pubDatetime}
-  back={{ href: "/publications/", label: UI.publications }}
 >
-  <p slot="meta" class="muted">
+  <div slot="meta" class="publication-meta">
+    {data.authors && <p>{data.authors}</p>}
+    <p>
+      <T {...UI.publishedIn} />
+      <em>{data.journal}</em>
+    </p>
+    <p class="citation">
+      <strong><T {...UI.citation} /></strong>
+      {citationOf(pub)}
+    </p>
     {
-      data.authors && (
-        <>
-          {data.authors}
-          <br />
-        </>
+      (data.pdf || data.doi) && (
+        <p class="archive__item-links">
+          {data.pdf && (
+            <a href={data.pdf}>
+              <Icon name="pdf" />
+              <T {...UI.downloadPaper} />
+            </a>
+          )}
+          {data.doi && (
+            <a href={data.doi}>
+              <Icon name="link" />
+              DOI
+            </a>
+          )}
+        </p>
       )
     }
-    <em>{data.journal}</em>
-    {
-      data.doi && (
-        <>
-          {" · "}
-          <a href={data.doi}>DOI</a>
-        </>
-      )
-    }
-    {
-      data.pdf && (
-        <>
-          {" · "}
-          <a href={data.pdf}>PDF</a>
-        </>
-      )
-    }
-  </p>
+  </div>
   <Content />
 </Article>

@@ -1,53 +1,109 @@
 ---
 import Base from "@/layouts/Base.astro";
 import T from "@/components/T.astro";
-import Link from "@/components/Link.astro";
-import { UI, type Bi } from "@/i18n";
+import Icon from "@/components/Icon.astro";
+import { UI, readTime } from "@/i18n";
 import { formatDate } from "@/utils/content";
 import "katex/dist/katex.min.css";
+
+type Neighbour = { href: string; title: string } | undefined;
 
 type Props = {
   title: string;
   description?: string;
   date: Date;
-  updated?: Date | null;
+  updated?: Date;
+  minutes?: number;
   tags?: string[];
-  back: { href: string; label: Bi };
+  prev?: Neighbour;
+  next?: Neighbour;
 };
 
-const { title, description, date, updated, tags = [], back } = Astro.props;
+const {
+  title,
+  description,
+  date,
+  updated,
+  minutes,
+  tags = [],
+  prev,
+  next,
+} = Astro.props;
 const showUpdated = updated && formatDate(updated) !== formatDate(date);
 ---
 
 <Base title={title} description={description}>
-  <article>
-    <header class="article-header">
-      <h1>{title}</h1>
-      <p class="muted">
-        <time datetime={date.toISOString()}>{formatDate(date)}</time>
+  <article class="page__inner-wrap">
+    <header>
+      <h1 class="page__title">{title}</h1>
+      <p class="page__meta">
+        <span>
+          <Icon name="calendar" />
+          <T {...UI.published} />
+          <time datetime={date.toISOString()}>{formatDate(date)}</time>
+        </span>
         {
           showUpdated && (
-            <>
-              {" · "}
-              <T {...UI.updated} />{" "}
+            <span>
+              <T {...UI.updated} />
               <time datetime={updated.toISOString()}>
                 {formatDate(updated)}
               </time>
-            </>
+            </span>
           )
         }
-        {tags.length > 0 && <> · {tags.join(" · ")}</>}
+        {
+          minutes && (
+            <span>
+              <Icon name="clock" />
+              <T {...readTime(minutes)} />
+            </span>
+          )
+        }
       </p>
       <slot name="meta" />
     </header>
-    <div class="prose">
+
+    <section class="page__content">
       <slot />
-    </div>
+    </section>
+
+    {
+      tags.length > 0 && (
+        <p class="page__taxonomy">
+          <strong>
+            <T {...UI.tags} />
+          </strong>
+          {tags.map(tag => (
+            <span class="page__taxonomy-item">{tag}</span>
+          ))}
+        </p>
+      )
+    }
+
+    {
+      (prev || next) && (
+        <nav class="pagination">
+          {prev ? (
+            <a href={prev.href} class="pagination--pager" title={prev.title}>
+              <T {...UI.previous} />
+            </a>
+          ) : (
+            <span class="pagination--pager disabled">
+              <T {...UI.previous} />
+            </span>
+          )}
+          {next ? (
+            <a href={next.href} class="pagination--pager" title={next.title}>
+              <T {...UI.next} />
+            </a>
+          ) : (
+            <span class="pagination--pager disabled">
+              <T {...UI.next} />
+            </span>
+          )}
+        </nav>
+      )
+    }
   </article>
-  <p class="back">
-    <Link
-      href={back.href}
-      label={{ zh: `← 返回${back.label.zh}`, en: `← Back to ${back.label.en}` }}
-    />
-  </p>
 </Base>
