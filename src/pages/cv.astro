@@ -1,0 +1,46 @@
+---
+import Base from "@/layouts/Base.astro";
+import T from "@/components/T.astro";
+import Link from "@/components/Link.astro";
+import profile from "@/data/profile.json";
+import { UI } from "@/i18n";
+
+const { cv } = profile;
+---
+
+<Base title={UI.cv}>
+  <h1><T {...UI.cv} /></h1>
+  {
+    cv.pdf && (
+      <p>
+        <Link href={cv.pdf} label={UI.downloadCv} />
+      </p>
+    )
+  }
+  {
+    cv.sections.map(section => (
+      <section class="cv-section">
+        <h2>
+          <T {...section.title} />
+        </h2>
+        <ul class="cv-list">
+          {section.items.map(item => (
+            <li>
+              <span class="cv-period muted">{item.period}</span>
+              <div>
+                <div class="cv-title">
+                  <T {...item.title} />
+                </div>
+                {(item.detail.zh || item.detail.en) && (
+                  <div class="muted">
+                    <T {...item.detail} />
+                  </div>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</Base>

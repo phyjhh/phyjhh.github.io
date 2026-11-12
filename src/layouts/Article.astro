@@ -1,0 +1,53 @@
+---
+import Base from "@/layouts/Base.astro";
+import T from "@/components/T.astro";
+import Link from "@/components/Link.astro";
+import { UI, type Bi } from "@/i18n";
+import { formatDate } from "@/utils/content";
+import "katex/dist/katex.min.css";
+
+type Props = {
+  title: string;
+  description?: string;
+  date: Date;
+  updated?: Date | null;
+  tags?: string[];
+  back: { href: string; label: Bi };
+};
+
+const { title, description, date, updated, tags = [], back } = Astro.props;
+const showUpdated = updated && formatDate(updated) !== formatDate(date);
+---
+
+<Base title={title} description={description}>
+  <article>
+    <header class="article-header">
+      <h1>{title}</h1>
+      <p class="muted">
+        <time datetime={date.toISOString()}>{formatDate(date)}</time>
+        {
+          showUpdated && (
+            <>
+              {" · "}
+              <T {...UI.updated} />{" "}
+              <time datetime={updated.toISOString()}>
+                {formatDate(updated)}
+              </time>
+            </>
+          )
+        }
+        {tags.length > 0 && <> · {tags.join(" · ")}</>}
+      </p>
+      <slot name="meta" />
+    </header>
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+  <p class="back">
+    <Link
+      href={back.href}
+      label={{ zh: `← 返回${back.label.zh}`, en: `← Back to ${back.label.en}` }}
+    />
+  </p>
+</Base>

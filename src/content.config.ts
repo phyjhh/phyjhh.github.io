@@ -1,54 +1,39 @@
-import { defineCollection, z, type ImageFunction } from "astro:content";
+import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
-import { SITE } from "@/config";
 
-const blogSchema = ({ image }: { image: ImageFunction }) =>
-  z.object({
-    author: z.string().default(SITE.author),
-    pubDatetime: z.date(),
-    modDatetime: z.date().optional().nullable(),
-    title: z.string(),
-    featured: z.boolean().optional(),
-    draft: z.boolean().optional(),
-    tags: z.array(z.string()).default(["others"]),
-    ogImage: image().or(z.string()).optional(),
-    description: z.string(),
-    canonicalURL: z.string().optional(),
-    hideEditPost: z.boolean().optional(),
-    timezone: z.string().optional(),
-  });
-
-const publicationSchema = ({ image }: { image: ImageFunction }) =>
-  z.object({
-    author: z.string().default(SITE.author),
-    pubDatetime: z.date(),
-    modDatetime: z.date().optional().nullable(),
-    title: z.string(),
-    journal: z.string(),
-    doi: z.string().url().optional(),
-    featured: z.boolean().optional(),
-    draft: z.boolean().optional(),
-    tags: z.array(z.string()).default(["others"]),
-    ogImage: image().or(z.string()).optional(),
-    description: z.string(),
-    canonicalURL: z.string().optional(),
-    hideEditPost: z.boolean().optional(),
-    timezone: z.string().optional(),
-  });
+/** Treat `field: ""` (or `~`) in frontmatter the same as leaving the field out. */
+const optional = <T extends z.ZodTypeAny>(schema: T) =>
+  z.preprocess(
+    v => (v === "" || v === null ? undefined : v),
+    schema.optional()
+  );
 
 const blog = defineCollection({
-  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/posts" }),
-  schema: blogSchema,
-});
-
-const notes = defineCollection({
-  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/notes" }),
-  schema: blogSchema,
+  loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/blog" }),
+  schema: z.object({
+    title: z.string(),
+    description: optional(z.string()),
+    pubDatetime: z.coerce.date(),
+    modDatetime: optional(z.coerce.date()),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
 });
 
 const publications = defineCollection({
   loader: glob({ pattern: "**/[^_]*.md", base: "./src/content/publications" }),
-  schema: publicationSchema,
+  schema: z.object({
+    title: z.string(),
+    /** e.g. "A. Author, B. Author, phyj" */
+    authors: optional(z.string()),
+    journal: z.string(),
+    pubDatetime: z.coerce.date(),
+    doi: optional(z.string().url()),
+    /** Link to a PDF or arXiv page. */
+    pdf: optional(z.string().url()),
+    description: optional(z.string()),
+    draft: z.boolean().default(false),
+  }),
 });
 
-export const collections = { blog, notes, publications };
+export const collections = { blog, publications };

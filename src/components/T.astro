@@ -1,0 +1,27 @@
+---
+/**
+ * Bilingual text: renders both languages, CSS shows the one the visitor picked.
+ * When one side is empty the other is used for both.
+ */
+import type { Bi } from "@/i18n";
+
+type Props = Bi;
+
+const zh = Astro.props.zh || Astro.props.en;
+const en = Astro.props.en || Astro.props.zh;
+---
+
+{
+  zh === en ? (
+    <Fragment>{zh}</Fragment>
+  ) : (
+    <Fragment>
+      <span class="zh" lang="zh-CN">
+        {zh}
+      </span>
+      <span class="en" lang="en">
+        {en}
+      </span>
+    </Fragment>
+  )
+}

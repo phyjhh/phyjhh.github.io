@@ -1,0 +1,40 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { yearOf } from "@/utils/content";
+
+type Props = { pubs: CollectionEntry<"publications">[] };
+
+const { pubs } = Astro.props;
+---
+
+<ol class="pub-list">
+  {
+    pubs.map(({ id, body, data }) => (
+      <li>
+        {body?.trim() ? (
+          <a href={`/publications/${id}/`} class="pub-title">
+            {data.title}
+          </a>
+        ) : (
+          <span class="pub-title">{data.title}</span>
+        )}
+        {data.authors && <div class="muted">{data.authors}</div>}
+        <div class="muted">
+          <em>{data.journal}</em>, {yearOf(data.pubDatetime)}
+          {data.doi && (
+            <>
+              {" · "}
+              <a href={data.doi}>DOI</a>
+            </>
+          )}
+          {data.pdf && (
+            <>
+              {" · "}
+              <a href={data.pdf}>PDF</a>
+            </>
+          )}
+        </div>
+      </li>
+    ))
+  }
+</ol>

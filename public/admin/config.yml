@@ -1,0 +1,242 @@
+# Sveltia CMS configuration for the site's /admin/ page.
+# Every save is a commit to `main`, which redeploys the site in a minute or two.
+
+backend:
+  name: github
+  repo: phyjhh/phyjhh.github.io
+  branch: main
+  # Sign in with a GitHub personal access token; no OAuth server needed.
+  auth_methods: [token]
+  commit_messages:
+    create: "Add {{collection}}: {{slug}}"
+    update: "Update {{collection}}: {{slug}}"
+    delete: "Delete {{collection}}: {{slug}}"
+    uploadMedia: "Upload {{path}}"
+    deleteMedia: "Delete {{path}}"
+
+app_title: phyj 后台
+site_url: https://phyjhh.github.io
+logo:
+  src: /favicon.svg
+
+# Uploaded images go here and are linked as /images/<file>
+media_folder: public/images
+public_folder: /images
+
+slug:
+  encoding: unicode
+  clean_accents: true
+
+# Leave empty optional fields out of the file instead of writing `field: ""`,
+# which the site would reject (e.g. an empty date).
+output:
+  omit_empty_optional_fields: true
+
+collections:
+  - name: blog
+    label: 博客 Blog
+    label_singular: 文章
+    folder: src/content/blog
+    extension: md
+    format: frontmatter
+    create: true
+    # File name = date + title; you can edit it before the first save.
+    slug:
+      template: "{{year}}-{{month}}-{{day}}-{{slug}}"
+      editable: [create]
+    preview_path: blog/{{slug}}/
+    summary: "{{title}}  ·  {{pubDatetime | date('YYYY-MM-DD')}}{{draft | ternary('  ·  草稿', '')}}"
+    sortable_fields:
+      fields: [pubDatetime, title]
+      default:
+        field: pubDatetime
+        direction: descending
+    fields:
+      - { name: title, label: 标题, widget: string }
+      - name: description
+        label: 简介
+        widget: string
+        required: false
+        hint: 一句话，显示在搜索结果和分享卡片里
+      - name: pubDatetime
+        label: 发布时间
+        widget: datetime
+        default: "{{now}}"
+        output_utc: true
+      - name: modDatetime
+        label: 最后修改
+        widget: datetime
+        required: false
+        output_utc: true
+        auto_now: [update]
+      - name: tags
+        label: 标签
+        widget: list
+        required: false
+        default: []
+        hint: 回车添加一个
+      - name: draft
+        label: 草稿（不在网站上显示）
+        widget: boolean
+        default: false
+      - name: body
+        label: 正文
+        widget: markdown
+        # Raw Markdown only, so LaTeX like $\psi_k$ is saved exactly as typed.
+        modes: [raw]
+        hint: 支持 LaTeX：行内 $...$，独立公式 $$...$$。写一个“### Table of contents”标题会自动生成目录。
+
+  - name: publications
+    label: 论文 Publications
+    label_singular: 论文
+    folder: src/content/publications
+    extension: md
+    format: frontmatter
+    create: true
+    slug:
+      template: "{{year}}-{{slug}}"
+      editable: [create]
+    summary: "{{title}}  ·  {{journal}}{{draft | ternary('  ·  草稿', '')}}"
+    sortable_fields:
+      fields: [pubDatetime, title]
+      default:
+        field: pubDatetime
+        direction: descending
+    fields:
+      - { name: title, label: 标题, widget: string }
+      - name: authors
+        label: 作者
+        widget: string
+        required: false
+        hint: 例如 A. Author, B. Author, phyj
+      - { name: journal, label: 期刊 / 会议, widget: string }
+      - name: pubDatetime
+        label: 发表日期
+        widget: datetime
+        type: date
+      - name: doi
+        label: DOI 链接
+        widget: string
+        required: false
+        pattern:
+          ["^https?://", "请填完整链接，例如 https://doi.org/10.1103/xxxx"]
+      - name: pdf
+        label: PDF / arXiv 链接
+        widget: string
+        required: false
+        pattern: ["^https?://", "请填完整链接"]
+      - { name: description, label: 简介, widget: string, required: false }
+      - name: draft
+        label: 草稿（不在网站上显示）
+        widget: boolean
+        default: false
+      - name: body
+        label: 摘要（可选，填了以后论文标题会链接到单独页面）
+        widget: markdown
+        modes: [raw]
+        required: false
+
+  - name: settings
+    label: 个人信息 Profile
+    files:
+      - name: profile
+        label: 主页与简历
+        file: src/data/profile.json
+        format: json
+        fields:
+          - name: name
+            label: 名字
+            widget: object
+            fields:
+              - { name: zh, label: 中文, widget: string }
+              - { name: en, label: English, widget: string }
+          - name: tagline
+            label: 一句话方向
+            widget: object
+            fields:
+              - { name: zh, label: 中文, widget: string, required: false }
+              - { name: en, label: English, widget: string, required: false }
+          - name: affiliation
+            label: 单位（留空则不显示）
+            widget: object
+            fields:
+              - { name: zh, label: 中文, widget: string, required: false }
+              - { name: en, label: English, widget: string, required: false }
+          - name: bio
+            label: 自我介绍
+            widget: object
+            fields:
+              - name: zh
+                label: 中文段落
+                widget: list
+                field: { name: paragraph, label: 段落, widget: text }
+              - name: en
+                label: English paragraphs
+                widget: list
+                field: { name: paragraph, label: Paragraph, widget: text }
+          - name: links
+            label: 链接
+            widget: list
+            summary: "{{label.zh}} — {{url}}"
+            fields:
+              - name: label
+                label: 显示文字
+                widget: object
+                fields:
+                  - { name: zh, label: 中文, widget: string }
+                  - { name: en, label: English, widget: string }
+              - name: url
+                label: 地址
+                widget: string
+                hint: 邮箱写成 mailto:you@example.com
+          - name: cv
+            label: 简历
+            widget: object
+            fields:
+              - name: pdf
+                label: PDF 版简历链接（可选）
+                widget: string
+                required: false
+              - name: sections
+                label: 栏目
+                widget: list
+                summary: "{{title.zh}}"
+                fields:
+                  - name: title
+                    label: 栏目名
+                    widget: object
+                    fields:
+                      - { name: zh, label: 中文, widget: string }
+                      - { name: en, label: English, widget: string }
+                  - name: items
+                    label: 条目
+                    widget: list
+                    summary: "{{period}}  {{title.zh}}"
+                    fields:
+                      - name: period
+                        label: 时间
+                        widget: string
+                        required: false
+                        hint: 例如 2022 – 2026
+                      - name: title
+                        label: 标题
+                        widget: object
+                        fields:
+                          - { name: zh, label: 中文, widget: string }
+                          - { name: en, label: English, widget: string }
+                      - name: detail
+                        label: 说明
+                        widget: object
+                        fields:
+                          - {
+                              name: zh,
+                              label: 中文,
+                              widget: string,
+                              required: false,
+                            }
+                          - {
+                              name: en,
+                              label: English,
+                              widget: string,
+                              required: false,
+                            }
