@@ -1,0 +1,27 @@
+---
+/** A project in a list, like AcademicPages' archive-single include. */
+import type { CollectionEntry } from "astro:content";
+import Icon from "@/components/Icon.astro";
+import { hasBody } from "@/utils/content";
+
+type Props = { item: CollectionEntry<"portfolio"> };
+
+const { item } = Astro.props;
+const { title, description, link } = item.data;
+const page = hasBody(item) ? `/portfolio/${item.id}/` : undefined;
+const href = page ?? link;
+---
+
+<article class="archive__item">
+  <h2 class="archive__item-title">
+    {href ? <a href={href}>{title}</a> : title}
+    {
+      page && link && (
+        <a href={link} class="archive__item-external" aria-label={link}>
+          <Icon name="external" />
+        </a>
+      )
+    }
+  </h2>
+  {description && <p class="archive__item-excerpt">{description}</p>}
+</article>

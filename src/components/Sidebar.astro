@@ -1,0 +1,92 @@
+---
+/** Author profile, laid out like AcademicPages' author-profile include. */
+import T from "@/components/T.astro";
+import Icon from "@/components/Icon.astro";
+import { profile, hasText } from "@/utils/profile";
+import { UI } from "@/i18n";
+
+const { name, avatar, bio, location, affiliation, links } = profile;
+const external = (url: string) => /^https?:/.test(url);
+---
+
+<aside class="sidebar" id="author-profile">
+  <div class="author">
+    {
+      avatar && (
+        <div class="author__avatar">
+          <img
+            src={avatar}
+            alt={name.en || name.zh}
+            width="175"
+            height="175"
+            decoding="async"
+          />
+        </div>
+      )
+    }
+    <div class="author__content">
+      <h3 class="author__name"><T {...name} /></h3>
+      {
+        hasText(bio) && (
+          <p class="author__bio">
+            <T {...bio} />
+          </p>
+        )
+      }
+    </div>
+    <div class="author__urls-wrapper">
+      <button
+        type="button"
+        class="btn btn--inverse follow-btn"
+        id="follow-toggle"
+        aria-expanded="false"
+        aria-controls="author-urls"
+      >
+        <T {...UI.follow} />
+      </button>
+      <ul class="author__urls" id="author-urls">
+        {
+          hasText(location) && (
+            <li class="author__desktop">
+              <Icon name="location" class="icon--pad" />
+              <T {...location} />
+            </li>
+          )
+        }
+        {
+          hasText(affiliation) && (
+            <li class="author__desktop">
+              <Icon name="affiliation" class="icon--pad" />
+              <T {...affiliation} />
+            </li>
+          )
+        }
+        {
+          links.map(link => (
+            <li>
+              <a
+                href={link.url}
+                rel={external(link.url) ? "me noopener" : undefined}
+                target={external(link.url) ? "_blank" : undefined}
+              >
+                <Icon name={link.icon} class="icon--pad" />
+                <T {...link.label} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</aside>
+
+<script is:inline>
+  (function () {
+    const sidebar = document.getElementById("author-profile");
+    const button = document.getElementById("follow-toggle");
+    button.addEventListener("click", () => {
+      const open = sidebar.classList.toggle("open");
+      button.setAttribute("aria-expanded", String(open));
+    });
+  })();
+</script>

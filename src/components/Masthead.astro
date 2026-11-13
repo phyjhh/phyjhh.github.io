@@ -1,0 +1,97 @@
+---
+import T from "@/components/T.astro";
+import Icon from "@/components/Icon.astro";
+import { SITE } from "@/config";
+import { UI } from "@/i18n";
+
+const path = Astro.url.pathname;
+const links = [
+  { href: "/publications/", label: UI.publications },
+  { href: "/portfolio/", label: UI.portfolio },
+  { href: "/blog/", label: UI.blog },
+  { href: "/cv/", label: UI.cv },
+];
+const isActive = (href: string) => path.startsWith(href.replace(/\/$/, ""));
+---
+
+<header class="masthead">
+  <div class="masthead__inner-wrap">
+    <nav class="greedy-nav" id="site-nav">
+      <a
+        href="/"
+        class="masthead__title"
+        aria-current={path === "/" ? "page" : undefined}>{SITE.title}</a
+      >
+      <ul class="visible-links" id="nav-links">
+        {
+          links.map(({ href, label }) => (
+            <li class="masthead__menu-item">
+              <a
+                href={href}
+                class:list={{ selected: isActive(href) }}
+                data-zh={label.zh}
+                data-en={label.en}
+                aria-current={isActive(href) ? "page" : undefined}
+              >
+                <T {...label} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="masthead__tools">
+        <button
+          id="lang-toggle"
+          type="button"
+          class="nav-btn"
+          aria-label="切换语言 / Switch language"
+        >
+          <T {...UI.switchLang} />
+        </button>
+        <button
+          id="theme-toggle"
+          type="button"
+          class="nav-btn"
+          aria-label="切换深色模式 / Toggle dark mode"
+        >
+          <Icon name="sun" class="theme-icon--light" />
+          <Icon name="moon" class="theme-icon--dark" />
+        </button>
+        <button
+          id="nav-toggle"
+          type="button"
+          class="nav-btn nav-btn--menu"
+          aria-expanded="false"
+          aria-controls="nav-links"
+        >
+          <Icon name="bars" />
+          <span class="sr-only"><T {...UI.menu} /></span>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script is:inline>
+  (function () {
+    const nav = document.getElementById("site-nav");
+    const menu = document.getElementById("nav-toggle");
+    document.getElementById("lang-toggle").addEventListener("click", () => {
+      const next = document.documentElement.dataset.lang === "zh" ? "en" : "zh";
+      window.setLang(next, true);
+    });
+    document
+      .getElementById("theme-toggle")
+      .addEventListener("click", () => window.toggleTheme());
+    menu.addEventListener("click", () => {
+      const open = nav.classList.toggle("open");
+      menu.setAttribute("aria-expanded", String(open));
+    });
+    document.addEventListener("click", e => {
+      if (nav.classList.contains("open") && !nav.contains(e.target)) {
+        nav.classList.remove("open");
+        menu.setAttribute("aria-expanded", "false");
+      }
+    });
+  })();
+</script>

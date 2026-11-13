@@ -1,180 +1,105 @@
-# AstroPaper 📄
+# phyjhh.github.io
 
-![AstroPaper](public/astropaper-og.jpg)
-[![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/community/file/1356898632249991861)
-![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![GitHub](https://img.shields.io/github/license/satnaing/astro-paper?color=%232F3741&style=for-the-badge)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white&style=for-the-badge)](https://conventionalcommits.org)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=for-the-badge)](http://commitizen.github.io/cz-cli/)
+Academic personal homepage built with [Astro](https://astro.build/), deployed to GitHub Pages on every push to `main`. The layout (top navigation, author sidebar, archive lists) is adapted from [AcademicPages](https://github.com/academicpages/academicpages.github.io) (MIT); icons are [Font Awesome Free](https://fontawesome.com/license/free) (CC BY 4.0).
 
-AstroPaper is a minimal, responsive, accessible and SEO-friendly Astro blog theme. This theme is designed and crafted based on [my personal blog](https://satnaing.dev/blog).
+## Where things live
 
-Read [the blog posts](https://astro-paper.pages.dev/posts/) or check [the README Documentation Section](#-documentation) for more info.
+| What                                                     | File                            |
+| -------------------------------------------------------- | ------------------------------- |
+| Sidebar (avatar, bio, location, links), About page, CV   | `src/data/profile.json`         |
+| Blog posts / notes (Markdown, LaTeX)                     | `src/content/blog/*.md`         |
+| Publications                                             | `src/content/publications/*.md` |
+| Portfolio projects                                       | `src/content/portfolio/*.md`    |
+| Images (avatar, uploads) → link as `/images/x.png`       | `public/images/`                |
+| Interface text (nav, buttons) in zh / en                 | `src/i18n.ts`                   |
+| Site title, time zone, number of posts on the About page | `src/config.ts`                 |
+| Styles and colours (light / dark)                        | `src/styles/global.css`         |
 
-## 🔥 Features
+The header has a 中文 / English switch and a light / dark switch (default: follow the system). Posts, papers and projects are shown as written.
 
-- [x] type-safe markdown
-- [x] super fast performance
-- [x] accessible (Keyboard/VoiceOver)
-- [x] responsive (mobile ~ desktops)
-- [x] SEO-friendly
-- [x] light & dark mode
-- [x] fuzzy search
-- [x] draft posts & pagination
-- [x] sitemap & rss feed
-- [x] followed best practices
-- [x] highly customizable
-- [x] dynamic OG image generation for blog posts [#15](https://github.com/satnaing/astro-paper/pull/15) ([Blog Post](https://astro-paper.pages.dev/posts/dynamic-og-image-generation-in-astropaper-blog-posts/))
+## Admin panel (`/admin/`)
 
-_Note: I've tested screen-reader accessibility of AstroPaper using **VoiceOver** on Mac and **TalkBack** on Android. I couldn't test all other screen-readers out there. However, accessibility enhancements in AstroPaper should be working fine on others as well._
+Open <https://phyjhh.github.io/admin/> to write posts, add publications and edit your profile/CV in the browser. It is [Sveltia CMS](https://github.com/sveltia/sveltia-cms), configured in `public/admin/config.yml`. Every save is a commit to `main`, so the site redeploys a minute or two later.
 
-## ✅ Lighthouse Score
+**Sign in** with a GitHub token (one-time setup):
 
-<p align="center">
-  <a href="https://pagespeed.web.dev/report?url=https%3A%2F%2Fastro-paper.pages.dev%2F&form_factor=desktop">
-    <img width="710" alt="AstroPaper Lighthouse Score" src="AstroPaper-lighthouse-score.svg">
-  <a>
-</p>
+1. GitHub → Settings → Developer settings → Personal access tokens → **Fine-grained tokens** → Generate new token.
+2. Repository access: **Only select repositories** → `phyjhh/phyjhh.github.io`.
+3. Repository permissions: **Contents → Read and write**.
+4. Copy the token and paste it into “使用访问令牌登录” on the admin page. The browser remembers it.
 
-## 🚀 Project Structure
+On a desktop Chrome/Edge with a local clone, “使用本地仓库” edits the files on your disk instead; commit and push them yourself.
 
-Inside of AstroPaper, you'll see the following folders and files:
+Notes: the body editor is plain Markdown, so LaTeX is saved exactly as typed; its preview shows formulas as source. New posts are named `YYYY-MM-DD-title.md`. Uploaded images go to `public/images/`; PDFs uploaded for a paper or the CV, and files attached to a blog post (shown as a list at the end of the post), go to `public/files/` and are linked as `/files/<name>`.
 
-```bash
-/
-├── public/
-│   ├── assets/
-|   ├── pagefind/ # auto-generated when build
-│   └── favicon.svg
-│   └── astropaper-og.jpg
-│   └── favicon.svg
-│   └── toggle-theme.js
-├── src/
-│   ├── assets/
-│   │   └── icons/
-│   │   └── images/
-│   ├── components/
-│   ├── data/
-│   │   └── blog/
-│   │       └── some-blog-posts.md
-│   ├── layouts/
-│   └── pages/
-│   └── styles/
-│   └── utils/
-│   └── config.ts
-│   └── constants.ts
-│   └── content.config.ts
-└── astro.config.ts
-```
+## Publishing a Markdown file as a post
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Upload a finished `.md` file (from Typora, Obsidian, …) straight into `src/content/blog/`: on GitHub, open that folder and choose **Add file → Upload files**. No front matter is needed. Before each build, `scripts/frontmatter.mjs` adds what is missing:
 
-Any static assets, like images, can be placed in the `public/` directory.
+- `title`: the first `# Heading` (removed from the body when it opens the file), otherwise the file name
+- `pubDatetime`: an existing `date` / `created` property, otherwise the time the file was committed
 
-All blog posts are stored in `src/data/blog` directory.
+The deploy workflow commits these additions back, so the date stays fixed; edit them later in the admin panel if you like. Images referenced by local paths (`![](./img.png)`, Obsidian `![[img.png]]`) are not uploaded with the file: upload them to `public/images/` and link them as `/images/img.png`.
 
-## 📖 Documentation
+## Writing a post
 
-Documentation can be read in two formats\_ _markdown_ & _blog post_.
+Create `src/content/blog/my-post.md`:
 
-- Configuration - [markdown](src/data/blog/how-to-configure-astropaper-theme.md) | [blog post](https://astro-paper.pages.dev/posts/how-to-configure-astropaper-theme/)
-- Add Posts - [markdown](src/data/blog/adding-new-post.md) | [blog post](https://astro-paper.pages.dev/posts/adding-new-posts-in-astropaper-theme/)
-- Customize Color Schemes - [markdown](src/data/blog/customizing-astropaper-theme-color-schemes.md) | [blog post](https://astro-paper.pages.dev/posts/customizing-astropaper-theme-color-schemes/)
-- Predefined Color Schemes - [markdown](src/data/blog/predefined-color-schemes.md) | [blog post](https://astro-paper.pages.dev/posts/predefined-color-schemes/)
-
-## 💻 Tech Stack
-
-**Main Framework** - [Astro](https://astro.build/)  
-**Type Checking** - [TypeScript](https://www.typescriptlang.org/)  
-**Styling** - [TailwindCSS](https://tailwindcss.com/)  
-**UI/UX** - [Figma Design File](https://www.figma.com/community/file/1356898632249991861)  
-**Static Search** - [FuseJS](https://pagefind.app/)  
-**Icons** - [Tablers](https://tabler-icons.io/)  
-**Code Formatting** - [Prettier](https://prettier.io/)  
-**Deployment** - [Cloudflare Pages](https://pages.cloudflare.com/)  
-**Illustration in About Page** - [https://freesvgillustration.com](https://freesvgillustration.com/)  
-**Linting** - [ESLint](https://eslint.org)
-
-## 👨🏻‍💻 Running Locally
-
-You can start using this project locally by running the following command in your desired directory:
-
-```bash
-# pnpm
-pnpm create astro@latest --template satnaing/astro-paper
-
-# npm
-npm create astro@latest -- --template satnaing/astro-paper
-
-# yarn
-yarn create astro --template satnaing/astro-paper
-
-# bun
-bun create astro@latest -- --template satnaing/astro-paper
-```
-
-Then start the project by running the following commands:
-
-```bash
-# install dependencies if you haven't done so in the previous step.
-pnpm install
-
-# start running the project
-pnpm run dev
-```
-
-As an alternative approach, if you have Docker installed, you can use Docker to run this project locally. Here's how:
-
-```bash
-# Build the Docker image
-docker build -t astropaper .
-
-# Run the Docker container
-docker run -p 4321:80 astropaper
-```
-
-## Google Site Verification (optional)
-
-You can easily add your [Google Site Verification HTML tag](https://support.google.com/webmasters/answer/9008080#meta_tag_verification&zippy=%2Chtml-tag) in AstroPaper using an environment variable. This step is optional. If you don't add the following environment variable, the google-site-verification tag won't appear in the HTML `<head>` section.
-
-```bash
-# in your environment variable file (.env)
-PUBLIC_GOOGLE_SITE_VERIFICATION=your-google-site-verification-value
-```
-
-> See [this discussion](https://github.com/satnaing/astro-paper/discussions/334#discussioncomment-10139247) for adding AstroPaper to the Google Search Console.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-> **_Note!_** For `Docker` commands we must have it [installed](https://docs.docker.com/engine/install/) in your machine.
-
-| Command                              | Action                                                                                                                           |
-| :----------------------------------- | :------------------------------------------------------------------------------------------------------------------------------- |
-| `pnpm install`                       | Installs dependencies                                                                                                            |
-| `pnpm run dev`                       | Starts local dev server at `localhost:4321`                                                                                      |
-| `pnpm run build`                     | Build your production site to `./dist/`                                                                                          |
-| `pnpm run preview`                   | Preview your build locally, before deploying                                                                                     |
-| `pnpm run format:check`              | Check code format with Prettier                                                                                                  |
-| `pnpm run format`                    | Format codes with Prettier                                                                                                       |
-| `pnpm run sync`                      | Generates TypeScript types for all Astro modules. [Learn more](https://docs.astro.build/en/reference/cli-reference/#astro-sync). |
-| `pnpm run lint`                      | Lint with ESLint                                                                                                                 |
-| `docker compose up -d`               | Run AstroPaper on docker, You can access with the same hostname and port informed on `dev` command.                              |
-| `docker compose run app npm install` | You can run any command above into the docker container.                                                                         |
-| `docker build -t astropaper .`       | Build Docker image for AstroPaper.                                                                                               |
-| `docker run -p 4321:80 astropaper`   | Run AstroPaper on Docker. The website will be accessible at `http://localhost:4321`.                                             |
-
-> **_Warning!_** Windows PowerShell users may need to install the [concurrently package](https://www.npmjs.com/package/concurrently) if they want to [run diagnostics](https://docs.astro.build/en/reference/cli-reference/#astro-check) during development (`astro check --watch & astro dev`). For more info, see [this issue](https://github.com/satnaing/astro-paper/issues/113).
-
-## ✨ Feedback & Suggestions
-
-If you have any suggestions/feedback, you can contact me via [my email](mailto:contact@satnaing.dev). Alternatively, feel free to open an issue if you find bugs or want to request new features.
-
-## 📜 License
-
-Licensed under the MIT License, Copyright © 2025
-
+```md
+---
+title: 文章标题
+pubDatetime: 2026-11-12T10:00:00Z
+description: 一句话简介（可选）
+tags: [拓扑超导]
+draft: false
 ---
 
-Made with 🤍 by [Sat Naing](https://satnaing.dev) 👨🏻‍💻 and [contributors](https://github.com/satnaing/astro-paper/graphs/contributors).
+正文，支持公式 $E = mc^2$ 和
+
+$$H = \sum_k \psi_k^\dagger h(k) \psi_k$$
+```
+
+A heading named `Table of contents` gets an auto-generated, collapsible table of contents.
+
+## Adding a publication
+
+Create `src/content/publications/paper.md`:
+
+```md
+---
+title: Paper title
+authors: A. Author, phyj
+journal: Physical Review B
+pubDatetime: 2026-01-01T00:00:00Z
+doi: https://doi.org/10.1103/xxxx
+pdf: /files/my-paper.pdf # a file in public/files/, or a URL such as https://arxiv.org/abs/xxxx.xxxxx
+---
+
+Optional abstract. If there is text here the title links to its own page.
+```
+
+## Adding a portfolio project
+
+Create `src/content/portfolio/my-project.md`:
+
+```md
+---
+title: Project name
+description: One-line summary shown in the list
+pubDatetime: 2026-01-01T00:00:00Z
+link: https://github.com/phyjhh/my-project
+image: /images/my-project.png
+draft: false
+---
+
+Optional details. With text here the project gets its own page; without it the title links to `link`.
+```
+
+## Commands
+
+```bash
+pnpm install
+pnpm dev          # local preview at http://localhost:4321
+pnpm build        # type-check and build into dist/
+pnpm lint && pnpm format:check
+```
