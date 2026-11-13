@@ -95,6 +95,10 @@ draft: false
 Optional details. With text here the project gets its own page; without it the title links to `link`.
 ```
 
+## Publishing with agents
+
+Agents (and people) can publish through pull requests: see [AGENTS.md](AGENTS.md) for paths, front matter, the checks that run, and the rules. A pull request that only adds or edits files in `src/content/`, `public/images/` or `public/files/` is merged and deployed automatically once CI passes (`.github/workflows/content-automerge.yml`); anything else waits for a person.
+
 ## Commands
 
 ```bash
@@ -102,4 +106,5 @@ pnpm install
 pnpm dev          # local preview at http://localhost:4321
 pnpm build        # type-check and build into dist/
 pnpm lint && pnpm format:check
+pnpm check:content   # after build: formulas, links, images, personal data, sizes
 ```
