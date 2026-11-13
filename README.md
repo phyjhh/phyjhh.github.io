@@ -32,6 +32,15 @@ On a desktop Chrome/Edge with a local clone, “使用本地仓库” edits the 
 
 Notes: the body editor is plain Markdown, so LaTeX is saved exactly as typed; its preview shows formulas as source. New posts are named `YYYY-MM-DD-title.md`. Uploaded images go to `public/images/`; PDFs uploaded for a paper or the CV, and files attached to a blog post (shown as a list at the end of the post), go to `public/files/` and are linked as `/files/<name>`.
 
+## Publishing a Markdown file as a post
+
+Upload a finished `.md` file (from Typora, Obsidian, …) straight into `src/content/blog/`: on GitHub, open that folder and choose **Add file → Upload files**. No front matter is needed. Before each build, `scripts/frontmatter.mjs` adds what is missing:
+
+- `title`: the first `# Heading` (removed from the body when it opens the file), otherwise the file name
+- `pubDatetime`: an existing `date` / `created` property, otherwise the time the file was committed
+
+The deploy workflow commits these additions back, so the date stays fixed; edit them later in the admin panel if you like. Images referenced by local paths (`![](./img.png)`, Obsidian `![[img.png]]`) are not uploaded with the file: upload them to `public/images/` and link them as `/images/img.png`.
+
 ## Writing a post
 
 Create `src/content/blog/my-post.md`:
