@@ -121,10 +121,14 @@ collections:
         pattern:
           ["^https?://", "请填完整链接，例如 https://doi.org/10.1103/xxxx"]
       - name: pdf
-        label: PDF / arXiv 链接
-        widget: string
+        label: 论文 PDF（上传文件，或填 arXiv 等链接）
+        widget: file
         required: false
-        pattern: ["^https?://", "请填完整链接"]
+        accept: .pdf,application/pdf
+        # Uploaded PDFs go to public/files and are linked as /files/<name>.pdf
+        media_folder: /public/files
+        public_folder: /files
+        hint: 把 PDF 拖进来即可上传；要填 arXiv / 期刊链接，点“浏览”后选左侧的“输入 URL”
       - name: citation
         label: 推荐引用格式（可选）
         widget: string
@@ -288,6 +292,9 @@ collections:
                 label: PDF 版简历（可选）
                 widget: file
                 required: false
+                accept: .pdf,application/pdf
+                media_folder: /public/files
+                public_folder: /files
               - name: sections
                 label: 栏目
                 widget: list

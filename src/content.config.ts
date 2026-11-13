@@ -1,6 +1,11 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
+/** A full URL, or a path on this site such as /files/paper.pdf */
+const linkOrPath = z.string().refine(v => /^(https?:\/\/|\/)/.test(v), {
+  message: "Use a full URL (https://...) or a site path (/files/...)",
+});
+
 /** Treat `field: ""` (or `~`) in frontmatter the same as leaving the field out. */
 const optional = <T extends z.ZodTypeAny>(schema: T) =>
   z.preprocess(
@@ -29,8 +34,8 @@ const publications = defineCollection({
     journal: z.string(),
     pubDatetime: z.coerce.date(),
     doi: optional(z.string().url()),
-    /** Link to a PDF or arXiv page. */
-    pdf: optional(z.string().url()),
+    /** Uploaded PDF (/files/paper.pdf) or a link to a PDF / arXiv page. */
+    pdf: optional(linkOrPath),
     /** Shown as "Recommended citation"; generated from the fields when empty. */
     citation: optional(z.string()),
     description: optional(z.string()),

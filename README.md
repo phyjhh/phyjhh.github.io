@@ -30,7 +30,7 @@ Open <https://phyjhh.github.io/admin/> to write posts, add publications and edit
 
 On a desktop Chrome/Edge with a local clone, “使用本地仓库” edits the files on your disk instead; commit and push them yourself.
 
-Notes: the body editor is plain Markdown, so LaTeX is saved exactly as typed; its preview shows formulas as source. New posts are named `YYYY-MM-DD-title.md`. Uploaded images go to `public/images/`.
+Notes: the body editor is plain Markdown, so LaTeX is saved exactly as typed; its preview shows formulas as source. New posts are named `YYYY-MM-DD-title.md`. Uploaded images go to `public/images/`; PDFs uploaded for a paper or the CV go to `public/files/` and are linked as `/files/<name>.pdf`.
 
 ## Writing a post
 
@@ -63,7 +63,7 @@ authors: A. Author, phyj
 journal: Physical Review B
 pubDatetime: 2026-01-01T00:00:00Z
 doi: https://doi.org/10.1103/xxxx
-pdf: https://arxiv.org/abs/xxxx.xxxxx
+pdf: /files/my-paper.pdf # a file in public/files/, or a URL such as https://arxiv.org/abs/xxxx.xxxxx
 ---
 
 Optional abstract. If there is text here the title links to its own page.
