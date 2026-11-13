@@ -563,6 +563,9 @@ html[data-theme="dark"] .theme-icon--dark {
   display: block;
   max-width: 175px;
   width: 100%;
+  /* Crop any photo to a circle (a non-square photo would become an oval). */
+  aspect-ratio: 1;
+  object-fit: cover;
   border-radius: 50%;
 }
 
@@ -671,6 +674,7 @@ html[data-theme="dark"] .theme-icon--dark {
 
   .author__avatar img {
     width: 100%;
+    height: auto;
     padding: 5px;
     border: 1px solid var(--border);
   }
