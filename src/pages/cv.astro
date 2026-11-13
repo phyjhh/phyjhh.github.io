@@ -1,0 +1,64 @@
+---
+/** CV laid out like AcademicPages' cv page: section headings with lists. */
+import Base from "@/layouts/Base.astro";
+import T from "@/components/T.astro";
+import { profile, hasText } from "@/utils/profile";
+import { UI } from "@/i18n";
+import { citationOf, getPublications } from "@/utils/content";
+
+const { cv } = profile;
+const pubs = await getPublications();
+---
+
+<Base title={UI.cv} layout="archive">
+  <h1 class="page__title"><T {...UI.cv} /></h1>
+  <div class="cv">
+    {
+      cv.pdf && (
+        <p>
+          <a href={cv.pdf}>
+            <T {...UI.downloadCv} />
+          </a>
+        </p>
+      )
+    }
+    {
+      cv.sections.map(section => (
+        <>
+          <h1>
+            <T {...section.title} />
+          </h1>
+          <ul>
+            {section.items.map(item => (
+              <li>
+                {item.period && <>{item.period}: </>}
+                <T {...item.title} />
+                {hasText(item.detail) && (
+                  <ul>
+                    <li>
+                      <T {...item.detail} />
+                    </li>
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </>
+      ))
+    }
+    {
+      pubs.length > 0 && (
+        <>
+          <h1>
+            <T {...UI.publications} />
+          </h1>
+          <ul>
+            {pubs.map(pub => (
+              <li>{citationOf(pub)}</li>
+            ))}
+          </ul>
+        </>
+      )
+    }
+  </div>
+</Base>

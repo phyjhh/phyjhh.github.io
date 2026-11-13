@@ -1,23 +1,10 @@
 export const SITE = {
   website: "https://phyjhh.github.io/",
-  author: "phyj",
-  profile: "https://github.com/phyjhh",
-  desc: "My personal blog and portfolio.",
+  /** Short name shown in the header and the browser tab. */
   title: "phyj",
-  ogImage: "astropaper-og.jpg",
-  lightAndDarkMode: true,
-  postPerIndex: 4,
-  postPerPage: 4,
-  scheduledPostMargin: 15 * 60 * 1000,
-  showArchives: true,
-  showBackButton: true,
-  editPost: {
-    enabled: true,
-    text: "Edit page",
-    url: "https://github.com/phyjhh/phyjhh.github.io/edit/main/",
-  },
-  dynamicOgImage: true,
-  dir: "ltr",
-  lang: "en",
+  description: "phyj — physics notes, publications and CV.",
+  /** Dates on the site are shown in this time zone. */
   timezone: "Asia/Shanghai",
+  /** How many recent blog posts the home page lists. */
+  recentPosts: 5,
 } as const;

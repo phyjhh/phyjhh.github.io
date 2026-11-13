@@ -1,0 +1,148 @@
+---
+/** A single post or project, like AcademicPages' single layout. */
+import Base from "@/layouts/Base.astro";
+import T from "@/components/T.astro";
+import Icon from "@/components/Icon.astro";
+import { UI, readTime } from "@/i18n";
+import { formatDate, formatLongDate } from "@/utils/content";
+import "katex/dist/katex.min.css";
+
+type Neighbour = { href: string; title: string } | undefined;
+type Attachment = { file: string; label?: string };
+
+type Props = {
+  title: string;
+  description?: string;
+  date: Date;
+  updated?: Date;
+  minutes?: number;
+  tags?: string[];
+  attachments?: Attachment[];
+  prev?: Neighbour;
+  next?: Neighbour;
+};
+
+const {
+  title,
+  description,
+  date,
+  updated,
+  minutes,
+  tags = [],
+  attachments = [],
+  prev,
+  next,
+} = Astro.props;
+const showUpdated = updated && formatDate(updated) !== formatDate(date);
+
+/** "/files/My%20Slides.pdf" -> "My Slides.pdf" */
+const fileName = (path: string) => {
+  const last = path.split(/[?#]/)[0].split("/").filter(Boolean).pop() ?? path;
+  try {
+    return decodeURIComponent(last);
+  } catch {
+    return last;
+  }
+};
+const isPdf = (path: string) => /\.pdf($|[?#])/i.test(path);
+---
+
+<Base title={title} description={description}>
+  <div class="page__inner-wrap">
+    <header>
+      <h1 class="page__title">{title}</h1>
+      {
+        minutes && (
+          <p class="page__meta">
+            <Icon name="clock" />
+            <T {...readTime(minutes)} />
+          </p>
+        )
+      }
+      <p class="page__date">
+        <strong><Icon name="calendar" /> <T {...UI.published} /></strong>
+        <time datetime={date.toISOString()}
+          ><T {...formatLongDate(date)} /></time
+        >
+        {
+          showUpdated && (
+            <>
+              {" · "}
+              <T {...UI.updated} />{" "}
+              <time datetime={updated.toISOString()}>
+                <T {...formatLongDate(updated)} />
+              </time>
+            </>
+          )
+        }
+      </p>
+      <slot name="meta" />
+    </header>
+
+    <section class="page__content">
+      <slot />
+      {
+        attachments.length > 0 && (
+          <>
+            <h2>
+              <T {...UI.attachments} />
+            </h2>
+            <ul class="attachments">
+              {attachments.map(({ file, label }) => (
+                <li>
+                  <Icon name={isPdf(file) ? "pdf" : "file"} />{" "}
+                  <a
+                    href={file}
+                    download={file.startsWith("/") ? "" : undefined}
+                  >
+                    {label || fileName(file)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+    </section>
+
+    {
+      tags.length > 0 && (
+        <footer class="page__meta">
+          <p class="page__taxonomy">
+            <strong>
+              <T {...UI.tags} />
+            </strong>
+            {tags.map(tag => (
+              <span class="page__taxonomy-item">{tag}</span>
+            ))}
+          </p>
+        </footer>
+      )
+    }
+
+    {
+      (prev || next) && (
+        <nav class="pagination">
+          {prev ? (
+            <a href={prev.href} class="pagination--pager" title={prev.title}>
+              <T {...UI.previous} />
+            </a>
+          ) : (
+            <span class="pagination--pager disabled">
+              <T {...UI.previous} />
+            </span>
+          )}
+          {next ? (
+            <a href={next.href} class="pagination--pager" title={next.title}>
+              <T {...UI.next} />
+            </a>
+          ) : (
+            <span class="pagination--pager disabled">
+              <T {...UI.next} />
+            </span>
+          )}
+        </nav>
+      )
+    }
+  </div>
+</Base>

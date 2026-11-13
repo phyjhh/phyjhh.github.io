@@ -1,0 +1,36 @@
+---
+import Base from "@/layouts/Base.astro";
+import T from "@/components/T.astro";
+import PostItem from "@/components/PostItem.astro";
+import { UI } from "@/i18n";
+import { getPosts, yearOf } from "@/utils/content";
+
+const posts = await getPosts();
+
+const byYear = new Map<string, typeof posts>();
+for (const post of posts) {
+  const year = yearOf(post.data.pubDatetime);
+  byYear.set(year, [...(byYear.get(year) ?? []), post]);
+}
+---
+
+<Base title={UI.blog} layout="archive">
+  <h1 class="page__title"><T {...UI.blog} /></h1>
+  {
+    posts.length === 0 && (
+      <p>
+        <T {...UI.noPosts} />
+      </p>
+    )
+  }
+  {
+    [...byYear].map(([year, list]) => (
+      <section>
+        <h2 class="archive__subtitle">{year}</h2>
+        {list.map(post => (
+          <PostItem post={post} />
+        ))}
+      </section>
+    ))
+  }
+</Base>
