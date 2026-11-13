@@ -11,7 +11,9 @@
     "astro": "astro",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "check:content": "node scripts/check-content.mjs",
+    "schemas": "node scripts/schemas.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",

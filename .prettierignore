@@ -11,6 +11,7 @@
 !package.json
 !eslint.config.js
 !README.md
+!AGENTS.md
 
 # Your own writing is not reformatted
 /src/content

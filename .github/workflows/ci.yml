@@ -54,3 +54,11 @@ jobs:
 
       - name: "🚀 Build the project"
         run: pnpm run build
+
+      # Formulas, links, local image paths, personal data, file sizes
+      # (scripts/check-content.mjs). Needs the build above.
+      - name: "🧪 Check content"
+        run: pnpm run check:content
+
+      - name: "📐 Check schemas are up to date"
+        run: node scripts/schemas.mjs --check

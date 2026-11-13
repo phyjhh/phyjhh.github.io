@@ -1,0 +1,77 @@
+name: Auto-merge content PRs
+
+# After CI passes on a pull request, merge it automatically if it only adds
+# or edits content: posts, publications, projects and uploaded files.
+# Anything else (code, workflows, CMS config, profile, deletions or renames)
+# waits for a person. See AGENTS.md.
+#
+# This runs from main, so a pull request can't change these rules for itself.
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+
+permissions:
+  contents: write # merge the pull request
+  pull-requests: write
+  actions: write # start the deploy workflow
+
+concurrency:
+  group: content-automerge
+  cancel-in-progress: false
+
+jobs:
+  automerge:
+    if: >-
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+      HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+    steps:
+      - name: Merge if the pull request only changes content
+        run: |
+          set -euo pipefail
+          note() { echo "$1"; echo "$1" >> "$GITHUB_STEP_SUMMARY"; }
+
+          # The open pull request for the branch CI just checked.
+          pr=$(gh api "repos/$REPO/pulls?state=open&head=${REPO%%/*}:$HEAD_BRANCH" --jq '.[0] // empty')
+          if [ -z "$pr" ]; then note "No open pull request for $HEAD_BRANCH."; exit 0; fi
+          number=$(jq -r .number <<<"$pr")
+          base=$(jq -r .base.ref <<<"$pr")
+          draft=$(jq -r .draft <<<"$pr")
+          head=$(jq -r .head.sha <<<"$pr")
+
+          if [ "$base" != "main" ]; then note "#$number targets $base, not main: left for a person."; exit 0; fi
+          if [ "$draft" = "true" ]; then note "#$number is a draft: left for a person."; exit 0; fi
+          if [ "$head" != "$HEAD_SHA" ]; then note "#$number has commits CI hasn't checked yet: waiting for the next run."; exit 0; fi
+
+          # Every changed file must be an added or edited content file.
+          blocked=$(gh api --paginate "repos/$REPO/pulls/$number/files" \
+            --jq '.[] | select(
+                    (.status != "added" and .status != "modified") or
+                    ((.filename | test("^(src/content/|public/images/|public/files/)")) | not)
+                  ) | "\(.status)\t\(.filename)"')
+          if [ -n "$blocked" ]; then
+            note "#$number changes more than content, so it needs a person to merge:"
+            printf '%s\n' "$blocked" | sed 's/^/    /' | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          gh pr merge "$number" --repo "$REPO" --merge --match-head-commit "$HEAD_SHA"
+          note "Merged #$number (content only, CI passed)."
+
+          # Agent branches are removed once merged.
+          case "$HEAD_BRANCH" in
+            agent/*) gh api -X DELETE "repos/$REPO/git/refs/heads/$HEAD_BRANCH" || true ;;
+          esac
+
+          # A merge made with the workflow token doesn't trigger push
+          # workflows, so start the deploy explicitly.
+          gh workflow run deploy.yml --repo "$REPO" --ref main
+          note "Started Deploy to GitHub Pages."
