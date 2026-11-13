@@ -30,7 +30,7 @@ Open <https://phyjhh.github.io/admin/> to write posts, add publications and edit
 
 On a desktop Chrome/Edge with a local clone, “使用本地仓库” edits the files on your disk instead; commit and push them yourself.
 
-Notes: the body editor is plain Markdown, so LaTeX is saved exactly as typed; its preview shows formulas as source. New posts are named `YYYY-MM-DD-title.md`. Uploaded images go to `public/images/`; PDFs uploaded for a paper or the CV, and files attached to a blog post (shown as a list at the end of the post), go to `public/files/` and are linked as `/files/<name>`.
+Notes: the body editor is plain Markdown, so LaTeX is saved exactly as typed; its preview shows formulas as source. New posts are named `YYYY-MM-DD-title.md`. Uploaded images go to `public/images/`; PDFs uploaded for a paper or the CV, and files attached to a blog post (listed at the end of the post; PDFs are shown page by page with pdf.js unless “在文章中直接显示” is turned off), go to `public/files/` and are linked as `/files/<name>`.
 
 ## Publishing a Markdown file as a post
 

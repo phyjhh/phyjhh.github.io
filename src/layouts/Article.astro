@@ -3,12 +3,13 @@
 import Base from "@/layouts/Base.astro";
 import T from "@/components/T.astro";
 import Icon from "@/components/Icon.astro";
+import PdfViewer from "@/components/PdfViewer.astro";
 import { UI, readTime } from "@/i18n";
 import { formatDate, formatLongDate } from "@/utils/content";
 import "katex/dist/katex.min.css";
 
 type Neighbour = { href: string; title: string } | undefined;
-type Attachment = { file: string; label?: string };
+type Attachment = { file: string; label?: string; show?: boolean };
 
 type Props = {
   title: string;
@@ -45,6 +46,10 @@ const fileName = (path: string) => {
   }
 };
 const isPdf = (path: string) => /\.pdf($|[?#])/i.test(path);
+
+// PDFs are shown page by page unless turned off; everything else is a link.
+const shown = attachments.filter(a => isPdf(a.file) && a.show !== false);
+const listed = attachments.filter(a => !shown.includes(a));
 ---
 
 <Base title={title} description={description}>
@@ -87,19 +92,24 @@ const isPdf = (path: string) => /\.pdf($|[?#])/i.test(path);
             <h2>
               <T {...UI.attachments} />
             </h2>
-            <ul class="attachments">
-              {attachments.map(({ file, label }) => (
-                <li>
-                  <Icon name={isPdf(file) ? "pdf" : "file"} />{" "}
-                  <a
-                    href={file}
-                    download={file.startsWith("/") ? "" : undefined}
-                  >
-                    {label || fileName(file)}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            {shown.map(({ file, label }) => (
+              <PdfViewer src={file} label={label || fileName(file)} />
+            ))}
+            {listed.length > 0 && (
+              <ul class="attachments">
+                {listed.map(({ file, label }) => (
+                  <li>
+                    <Icon name={isPdf(file) ? "pdf" : "file"} />{" "}
+                    <a
+                      href={file}
+                      download={file.startsWith("/") ? "" : undefined}
+                    >
+                      {label || fileName(file)}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </>
         )
       }
