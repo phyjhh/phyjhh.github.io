@@ -1,24 +1,22 @@
 ---
+/** CV laid out like AcademicPages' cv page: section headings with lists. */
 import Base from "@/layouts/Base.astro";
 import T from "@/components/T.astro";
-import Icon from "@/components/Icon.astro";
 import { profile, hasText } from "@/utils/profile";
 import { UI } from "@/i18n";
 import { citationOf, getPublications } from "@/utils/content";
 
 const { cv } = profile;
 const pubs = await getPublications();
-const has = hasText;
 ---
 
-<Base title={UI.cv}>
+<Base title={UI.cv} layout="archive">
   <h1 class="page__title"><T {...UI.cv} /></h1>
-  <section class="page__content">
+  <div class="cv">
     {
       cv.pdf && (
         <p>
-          <a href={cv.pdf} class="btn">
-            <Icon name="pdf" />
+          <a href={cv.pdf}>
             <T {...UI.downloadCv} />
           </a>
         </p>
@@ -27,23 +25,21 @@ const has = hasText;
     {
       cv.sections.map(section => (
         <>
-          <h2>
+          <h1>
             <T {...section.title} />
-          </h2>
-          <ul class="cv-list">
+          </h1>
+          <ul>
             {section.items.map(item => (
               <li>
-                <span class="cv-period">{item.period}</span>
-                <div>
-                  <strong>
-                    <T {...item.title} />
-                  </strong>
-                  {has(item.detail) && (
-                    <div class="cv-detail">
+                {item.period && <>{item.period}: </>}
+                <T {...item.title} />
+                {hasText(item.detail) && (
+                  <ul>
+                    <li>
                       <T {...item.detail} />
-                    </div>
-                  )}
-                </div>
+                    </li>
+                  </ul>
+                )}
               </li>
             ))}
           </ul>
@@ -53,16 +49,16 @@ const has = hasText;
     {
       pubs.length > 0 && (
         <>
-          <h2>
+          <h1>
             <T {...UI.publications} />
-          </h2>
-          <ol class="cv-publications">
+          </h1>
+          <ul>
             {pubs.map(pub => (
               <li>{citationOf(pub)}</li>
             ))}
-          </ol>
+          </ul>
         </>
       )
     }
-  </section>
+  </div>
 </Base>

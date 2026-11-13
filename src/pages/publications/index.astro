@@ -8,9 +8,9 @@ import { getPublications } from "@/utils/content";
 const pubs = await getPublications();
 ---
 
-<Base title={UI.publications}>
+<Base title={UI.publications} layout="archive">
   <h1 class="page__title"><T {...UI.publications} /></h1>
-  <section class="archive">
+  <section>
     {
       pubs.length > 0 ? (
         pubs.map(pub => <PubItem pub={pub} />)

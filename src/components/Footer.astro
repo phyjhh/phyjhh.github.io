@@ -9,15 +9,12 @@ import { UI } from "@/i18n";
   <footer>
     <div class="page__footer-follow">
       <ul>
-        <li>
-          <strong><T {...UI.follow} />:</strong>
-        </li>
+        <li><strong><T {...UI.follow} />:</strong></li>
         {
           profile.links.map(link => (
             <li>
               <a href={link.url}>
-                <Icon name={link.icon} />
-                <T {...link.label} />
+                <Icon name={link.icon} /> <T {...link.label} />
               </a>
             </li>
           ))
@@ -26,10 +23,10 @@ import { UI } from "@/i18n";
     </div>
     <div class="page__footer-copyright">
       © {new Date().getFullYear()}
-      <T {...profile.name} /> · <T {...UI.builtWith} />
+      <T {...profile.name} />, <T {...UI.builtWith} />
       <a href="https://github.com/academicpages/academicpages.github.io"
         >AcademicPages</a
-      >
+      >.
     </div>
   </footer>
 </div>

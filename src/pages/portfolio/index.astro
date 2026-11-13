@@ -8,9 +8,9 @@ import { getPortfolio } from "@/utils/content";
 const items = await getPortfolio();
 ---
 
-<Base title={UI.portfolio}>
+<Base title={UI.portfolio} layout="archive">
   <h1 class="page__title"><T {...UI.portfolio} /></h1>
-  <section class="archive">
+  <section>
     {
       items.length > 0 ? (
         items.map(item => <PortfolioItem item={item} />)

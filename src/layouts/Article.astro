@@ -1,9 +1,10 @@
 ---
+/** A single post or project, like AcademicPages' single layout. */
 import Base from "@/layouts/Base.astro";
 import T from "@/components/T.astro";
 import Icon from "@/components/Icon.astro";
 import { UI, readTime } from "@/i18n";
-import { formatDate } from "@/utils/content";
+import { formatDate, formatLongDate } from "@/utils/content";
 import "katex/dist/katex.min.css";
 
 type Neighbour = { href: string; title: string } | undefined;
@@ -33,31 +34,31 @@ const showUpdated = updated && formatDate(updated) !== formatDate(date);
 ---
 
 <Base title={title} description={description}>
-  <article class="page__inner-wrap">
+  <div class="page__inner-wrap">
     <header>
       <h1 class="page__title">{title}</h1>
-      <p class="page__meta">
-        <span>
-          <Icon name="calendar" />
-          <T {...UI.published} />
-          <time datetime={date.toISOString()}>{formatDate(date)}</time>
-        </span>
+      {
+        minutes && (
+          <p class="page__meta">
+            <Icon name="clock" />
+            <T {...readTime(minutes)} />
+          </p>
+        )
+      }
+      <p class="page__date">
+        <strong><Icon name="calendar" /> <T {...UI.published} /></strong>
+        <time datetime={date.toISOString()}
+          ><T {...formatLongDate(date)} /></time
+        >
         {
           showUpdated && (
-            <span>
-              <T {...UI.updated} />
+            <>
+              {" · "}
+              <T {...UI.updated} />{" "}
               <time datetime={updated.toISOString()}>
-                {formatDate(updated)}
+                <T {...formatLongDate(updated)} />
               </time>
-            </span>
-          )
-        }
-        {
-          minutes && (
-            <span>
-              <Icon name="clock" />
-              <T {...readTime(minutes)} />
-            </span>
+            </>
           )
         }
       </p>
@@ -70,14 +71,16 @@ const showUpdated = updated && formatDate(updated) !== formatDate(date);
 
     {
       tags.length > 0 && (
-        <p class="page__taxonomy">
-          <strong>
-            <T {...UI.tags} />
-          </strong>
-          {tags.map(tag => (
-            <span class="page__taxonomy-item">{tag}</span>
-          ))}
-        </p>
+        <footer class="page__meta">
+          <p class="page__taxonomy">
+            <strong>
+              <T {...UI.tags} />
+            </strong>
+            {tags.map(tag => (
+              <span class="page__taxonomy-item">{tag}</span>
+            ))}
+          </p>
+        </footer>
       )
     }
 
@@ -85,31 +88,25 @@ const showUpdated = updated && formatDate(updated) !== formatDate(date);
       (prev || next) && (
         <nav class="pagination">
           {prev ? (
-            <a href={prev.href} class="pagination--pager" rel="prev">
-              <span class="pagination__label">
-                ← <T {...UI.previous} />
-              </span>
-              <span class="pagination__title">{prev.title}</span>
+            <a href={prev.href} class="pagination--pager" title={prev.title}>
+              <T {...UI.previous} />
             </a>
           ) : (
-            <span class="pagination--pager disabled" aria-hidden="true" />
+            <span class="pagination--pager disabled">
+              <T {...UI.previous} />
+            </span>
           )}
           {next ? (
-            <a
-              href={next.href}
-              class="pagination--pager pagination--next"
-              rel="next"
-            >
-              <span class="pagination__label">
-                <T {...UI.next} /> →
-              </span>
-              <span class="pagination__title">{next.title}</span>
+            <a href={next.href} class="pagination--pager" title={next.title}>
+              <T {...UI.next} />
             </a>
           ) : (
-            <span class="pagination--pager disabled" aria-hidden="true" />
+            <span class="pagination--pager disabled">
+              <T {...UI.next} />
+            </span>
           )}
         </nav>
       )
     }
-  </article>
+  </div>
 </Base>

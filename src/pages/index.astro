@@ -15,63 +15,68 @@ const { about, interests } = profile;
 ---
 
 <Base>
-  <section class="page__content">
-    <div class="zh" lang="zh-CN">
-      {about.zh.map(p => <p>{p}</p>)}
-    </div>
-    <div class="en" lang="en">
-      {about.en.map(p => <p>{p}</p>)}
-    </div>
+  <div class="page__inner-wrap">
+    <header>
+      <h1 class="page__title"><T {...UI.aboutMe} /></h1>
+    </header>
+    <section class="page__content">
+      <div class="zh" lang="zh-CN">
+        {about.zh.map(p => <p>{p}</p>)}
+      </div>
+      <div class="en" lang="en">
+        {about.en.map(p => <p>{p}</p>)}
+      </div>
 
-    {
-      interests.length > 0 && (
-        <>
-          <h2>
-            <T {...UI.researchInterests} />
-          </h2>
-          <ul>
-            {interests.map(item => (
-              <li>
-                <T {...item} />
-              </li>
+      {
+        interests.length > 0 && (
+          <>
+            <h2>
+              <T {...UI.researchInterests} />
+            </h2>
+            <ul>
+              {interests.map(item => (
+                <li>
+                  <T {...item} />
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+
+      {
+        pubs.length > 0 && (
+          <>
+            <h2>
+              <T {...UI.selectedPublications} />
+            </h2>
+            {pubs.map(pub => (
+              <PubItem pub={pub} />
             ))}
-          </ul>
-        </>
-      )
-    }
+            <p>
+              <Link href="/publications/" label={UI.allPublications} />
+            </p>
+          </>
+        )
+      }
 
-    {
-      pubs.length > 0 && (
-        <>
-          <h2>
-            <T {...UI.selectedPublications} />
-          </h2>
-          {pubs.map(pub => (
-            <PubItem pub={pub} />
-          ))}
+      <h2><T {...UI.recentPosts} /></h2>
+      {
+        posts.length > 0 ? (
+          <>
+            {posts.map(post => (
+              <PostItem post={post} />
+            ))}
+            <p>
+              <Link href="/blog/" label={UI.allPosts} />
+            </p>
+          </>
+        ) : (
           <p>
-            <Link href="/publications/" label={UI.allPublications} />
+            <T {...UI.noPosts} />
           </p>
-        </>
-      )
-    }
-
-    <h2><T {...UI.recentPosts} /></h2>
-    {
-      posts.length > 0 ? (
-        <>
-          {posts.map(post => (
-            <PostItem post={post} />
-          ))}
-          <p>
-            <Link href="/blog/" label={UI.allPosts} />
-          </p>
-        </>
-      ) : (
-        <p>
-          <T {...UI.noPosts} />
-        </p>
-      )
-    }
-  </section>
+        )
+      }
+    </section>
+  </div>
 </Base>
