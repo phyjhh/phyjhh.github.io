@@ -18,7 +18,7 @@ importers:
         specifier: ^0.16.38
         version: 0.16.38
       pdfjs-dist:
-        specifier: 6.4.299
+        specifier: ~6.4.299
         version: 6.4.299
       rehype-katex:
         specifier: ^7.0.1
