@@ -17,3 +17,7 @@
 
 # Written by the CMS in its own formatting
 /src/data
+
+# Files uploaded through the admin panel are kept as uploaded
+/public/images
+/public/files

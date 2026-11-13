@@ -94,6 +94,11 @@ collections:
             label: 显示名称（可选，留空则显示文件名）
             widget: string
             required: false
+          - name: show
+            label: 在文章中直接显示（仅 PDF；关闭则只给下载链接）
+            widget: boolean
+            default: true
+            required: false
       - name: draft
         label: 草稿（不在网站上显示）
         widget: boolean

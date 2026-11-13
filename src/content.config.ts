@@ -23,7 +23,14 @@ const blog = defineCollection({
     tags: z.array(z.string()).default([]),
     /** Files listed at the end of the post, e.g. /files/slides.pdf */
     attachments: z
-      .array(z.object({ file: linkOrPath, label: optional(z.string()) }))
+      .array(
+        z.object({
+          file: linkOrPath,
+          label: optional(z.string()),
+          /** PDFs only: show the pages in the post (default) or just link. */
+          show: z.boolean().default(true),
+        })
+      )
       .default([]),
     draft: z.boolean().default(false),
   }),

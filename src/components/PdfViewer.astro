@@ -1,0 +1,146 @@
+---
+/**
+ * Shows a PDF inline. Pages are drawn with pdf.js, so it works on phones and
+ * in in-app browsers (WeChat etc.) that can't display PDFs themselves. The
+ * library and the file load only when the viewer scrolls near the screen,
+ * and each page is drawn when it comes into view.
+ */
+import T from "@/components/T.astro";
+import Icon from "@/components/Icon.astro";
+import { UI } from "@/i18n";
+
+type Props = { src: string; label: string };
+
+const { src, label } = Astro.props;
+---
+
+<figure class="pdf-viewer" data-pdf-viewer data-src={src}>
+  <figcaption class="pdf-viewer__bar">
+    <span class="pdf-viewer__name">
+      <Icon name="pdf" />
+      {label}
+    </span>
+    <span class="pdf-viewer__status" aria-live="polite"
+      ><T {...UI.pdfLoading} /></span
+    >
+    <span class="pdf-viewer__actions">
+      <a href={src} target="_blank" rel="noopener"><T {...UI.openPdf} /></a>
+      <a href={src} download><T {...UI.download} /></a>
+    </span>
+  </figcaption>
+  <div class="pdf-viewer__pages" tabindex="0" aria-label={label}></div>
+</figure>
+
+<script>
+  import workerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+
+  type PdfJs = typeof import("pdfjs-dist");
+  let pdfjs: Promise<PdfJs> | undefined;
+  const loadLibrary = () =>
+    (pdfjs ??= import("pdfjs-dist").then(lib => {
+      lib.GlobalWorkerOptions.workerSrc = workerSrc;
+      return lib;
+    }));
+
+  const bi = (zh: string, en: string) =>
+    `<span class="zh" lang="zh-CN">${zh}</span><span class="en" lang="en">${en}</span>`;
+
+  async function show(viewer: HTMLElement) {
+    const status = viewer.querySelector<HTMLElement>(".pdf-viewer__status")!;
+    const pages = viewer.querySelector<HTMLElement>(".pdf-viewer__pages")!;
+    const src = viewer.dataset.src!;
+    try {
+      const lib = await loadLibrary();
+      const doc = await lib.getDocument({
+        url: src,
+        cMapUrl: "/pdfjs/cmaps/",
+        cMapPacked: true,
+        standardFontDataUrl: "/pdfjs/standard_fonts/",
+        wasmUrl: "/pdfjs/wasm/",
+        iccUrl: "/pdfjs/iccs/",
+      }).promise;
+      const total = doc.numPages;
+      const first = await doc.getPage(1);
+      const base = first.getViewport({ scale: 1 });
+
+      // One placeholder per page, sized like page 1 until drawn.
+      const slots = Array.from({ length: total }, (_, i) => {
+        const slot = document.createElement("div");
+        slot.className = "pdf-page";
+        slot.dataset.page = String(i + 1);
+        slot.style.aspectRatio = `${base.width} / ${base.height}`;
+        slot.setAttribute("role", "img");
+        slot.setAttribute("aria-label", `${i + 1} / ${total}`);
+        pages.append(slot);
+        return slot;
+      });
+
+      const setStatus = (n: number) => {
+        status.innerHTML = bi(`第 ${n} / ${total} 页`, `Page ${n} of ${total}`);
+      };
+      setStatus(1);
+
+      const draw = async (slot: HTMLElement) => {
+        if (slot.dataset.drawn) return;
+        slot.dataset.drawn = "1";
+        const page = await doc.getPage(Number(slot.dataset.page));
+        const unscaled = page.getViewport({ scale: 1 });
+        const ratio = window.devicePixelRatio || 1;
+        const scale = (slot.clientWidth / unscaled.width) * ratio;
+        const viewport = page.getViewport({ scale });
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.floor(viewport.width);
+        canvas.height = Math.floor(viewport.height);
+        slot.style.aspectRatio = `${unscaled.width} / ${unscaled.height}`;
+        await page.render({ canvas, viewport }).promise;
+        slot.append(canvas);
+      };
+
+      // Draw pages near the visible part of the scroll box.
+      const drawer = new IntersectionObserver(
+        entries => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) draw(entry.target as HTMLElement);
+          }
+        },
+        { root: pages, rootMargin: "600px 0px" }
+      );
+      // Track which page is in the middle of the box for "Page n of N".
+      const tracker = new IntersectionObserver(
+        entries => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              setStatus(Number((entry.target as HTMLElement).dataset.page));
+            }
+          }
+        },
+        { root: pages, rootMargin: "-50% 0px -50% 0px" }
+      );
+      for (const slot of slots) {
+        drawer.observe(slot);
+        tracker.observe(slot);
+      }
+    } catch {
+      status.innerHTML = bi("无法预览", "Preview unavailable");
+      pages.innerHTML = `<p class="pdf-viewer__error">${bi(
+        "这个 PDF 无法在网页中显示，请用上方的“新窗口打开”或“下载”查看。",
+        "This PDF can't be shown here. Use “Open” or “Download” above."
+      )}</p>`;
+    }
+  }
+
+  const viewers = document.querySelectorAll<HTMLElement>("[data-pdf-viewer]");
+  if (viewers.length > 0) {
+    const starter = new IntersectionObserver(
+      entries => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          starter.unobserve(entry.target);
+          show(entry.target as HTMLElement);
+        }
+      },
+      { rootMargin: "400px 0px" }
+    );
+    viewers.forEach(v => starter.observe(v));
+  }
+</script>
