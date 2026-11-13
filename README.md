@@ -34,7 +34,7 @@ Notes: the body editor is plain Markdown, so LaTeX is saved exactly as typed; it
 
 ## Publishing a Markdown file as a post
 
-Upload a finished `.md` file (from Typora, Obsidian, …) straight into `src/content/blog/`: on GitHub, open that folder and choose **Add file → Upload files**. No front matter is needed. Before each build, `scripts/frontmatter.mjs` adds what is missing:
+Upload a finished `.md` file (from Typora, Obsidian, …) into `src/content/blog/`: in the admin panel open **上传 Markdown 成文章**, drop the file in and save (or use that folder in the asset library); or on GitHub open the folder and choose **Add file → Upload files**. No front matter is needed. Before each build, `scripts/frontmatter.mjs` adds what is missing:
 
 - `title`: the first `# Heading` (removed from the body when it opens the file), otherwise the file name
 - `pubDatetime`: an existing `date` / `created` property, otherwise the time the file was committed

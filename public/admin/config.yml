@@ -225,6 +225,26 @@ collections:
         modes: [raw]
         required: false
 
+  # Upload a finished .md file and it becomes a blog post: the upload lands
+  # in src/content/blog/, and the build adds a title and date if missing
+  # (scripts/frontmatter.mjs).
+  - name: markdown_upload
+    label: 上传 Markdown 成文章
+    description: 把写好的 .md 文件（Typora、Obsidian 等）拖进来，保存后就会成为一篇博客文章。标题取文中第一个 # 标题（没有就用文件名），日期用上传时间，之后可在「博客」里修改。
+    media_folder: /src/content/blog
+    public_folder: /blog
+    files:
+      - name: upload
+        label: 上传 Markdown 文件
+        file: src/data/md-upload.json
+        format: json
+        fields:
+          - name: file
+            label: Markdown 文件
+            widget: file
+            accept: .md,.markdown,text/markdown
+            required: false
+            hint: 拖入 .md 文件后点「保存」。笔记里引用的本地图片需要另外上传（素材库），并把链接改成 /images/文件名
   - name: settings
     label: 个人信息 Profile
     files:
