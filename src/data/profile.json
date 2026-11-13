@@ -5,8 +5,12 @@
   },
   "avatar": "/images/微信图片_20261113123149_37_39.jpg",
   "bio": {
-    "zh": "凝聚态物理 · 拓扑物态与拓扑超导",
-    "en": "Condensed matter physics · Topological phases and superconductivity"
+    "zh": "凝聚态物理 · 拓扑物态",
+    "en": "Condensed matter physics · Topological phases"
+  },
+  "location": {
+    "zh": "上海",
+    "en": "shanghai"
   },
   "links": [
     {
@@ -52,30 +56,26 @@
   ],
   "about": {
     "zh": [
-      "你好，我是 phyj。我关注凝聚态物理，尤其是拓扑物态、拓扑超导与 Majorana 费米子。",
+      "你好，我是 phyj。我关注凝聚态物理，尤其是拓扑物态、拓扑超导。",
       "这里放着我的学习笔记、论文、项目和简历。"
     ],
     "en": [
-      "Hi, I'm phyj. I'm interested in condensed matter physics, especially topological phases of matter, topological superconductivity and Majorana fermions.",
+      "Hi, I'm phyj. I'm interested in condensed matter physics, especially topological phases of matter, topological superconductivity .",
       "This site collects my notes, publications, projects and CV."
     ]
   },
   "interests": [
     {
+      "zh": "拓扑绝缘体",
+      "en": "topological insulator"
+    },
+    {
       "zh": "拓扑超导",
       "en": "Topological superconductivity"
     },
     {
-      "zh": "Majorana 费米子",
-      "en": "Majorana fermions"
-    },
-    {
-      "zh": "拓扑物态",
-      "en": "Topological phases of matter"
-    },
-    {
-      "zh": "费米液体理论",
-      "en": "Fermi liquid theory"
+      "zh": "拓扑光子学",
+      "en": "Topological photonics"
     }
   ],
   "cv": {
@@ -87,14 +87,25 @@
         },
         "items": [
           {
-            "period": "20XX – 20XX",
+            "period": "2021 – 2025",
             "title": {
-              "zh": "（学位 · 专业）",
-              "en": "(Degree · Major)"
+              "zh": "本科",
+              "en": "Undergraduate"
             },
             "detail": {
-              "zh": "（学校名称）",
-              "en": "(University)"
+              "zh": "内蒙古科技大学-应用物理",
+              "en": "Inner Mongolia University of Science and Technology-Applied Physics"
+            }
+          },
+          {
+            "period": "2021-",
+            "title": {
+              "zh": "研究生",
+              "en": "postgraduate"
+            },
+            "detail": {
+              "zh": "上海大学-物理学",
+              "en": "上海大学-物理学"
             }
           }
         ]
