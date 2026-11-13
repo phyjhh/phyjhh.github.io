@@ -23,6 +23,7 @@ export const UI = {
   published: { zh: "发布于：", en: "Published:" },
   updated: { zh: "更新于", en: "Updated:" },
   tags: { zh: "标签：", en: "Tags:" },
+  attachments: { zh: "附件", en: "Attachments" },
   citation: { zh: "推荐引用：", en: "Recommended citation:" },
   downloadPaper: { zh: "下载论文", en: "Download Paper" },
   projectPage: { zh: "项目主页", en: "Project page" },

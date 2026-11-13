@@ -21,6 +21,10 @@ const blog = defineCollection({
     pubDatetime: z.coerce.date(),
     modDatetime: optional(z.coerce.date()),
     tags: z.array(z.string()).default([]),
+    /** Files listed at the end of the post, e.g. /files/slides.pdf */
+    attachments: z
+      .array(z.object({ file: linkOrPath, label: optional(z.string()) }))
+      .default([]),
     draft: z.boolean().default(false),
   }),
 });

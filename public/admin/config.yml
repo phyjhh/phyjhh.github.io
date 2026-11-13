@@ -75,6 +75,25 @@ collections:
         required: false
         default: []
         hint: 回车添加一个
+      - name: attachments
+        label: 附件（PDF 等文件，显示在文章末尾）
+        label_singular: 附件
+        widget: list
+        required: false
+        default: []
+        summary: "{{label}} {{file}}"
+        fields:
+          - name: file
+            label: 文件
+            widget: file
+            # Uploaded files go to public/files and are linked as /files/<name>
+            media_folder: /public/files
+            public_folder: /files
+            hint: 把文件拖进来即可上传；也可以点“浏览”后选“输入 URL”填外部链接
+          - name: label
+            label: 显示名称（可选，留空则显示文件名）
+            widget: string
+            required: false
       - name: draft
         label: 草稿（不在网站上显示）
         widget: boolean

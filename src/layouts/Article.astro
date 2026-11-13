@@ -8,6 +8,7 @@ import { formatDate, formatLongDate } from "@/utils/content";
 import "katex/dist/katex.min.css";
 
 type Neighbour = { href: string; title: string } | undefined;
+type Attachment = { file: string; label?: string };
 
 type Props = {
   title: string;
@@ -16,6 +17,7 @@ type Props = {
   updated?: Date;
   minutes?: number;
   tags?: string[];
+  attachments?: Attachment[];
   prev?: Neighbour;
   next?: Neighbour;
 };
@@ -27,10 +29,22 @@ const {
   updated,
   minutes,
   tags = [],
+  attachments = [],
   prev,
   next,
 } = Astro.props;
 const showUpdated = updated && formatDate(updated) !== formatDate(date);
+
+/** "/files/My%20Slides.pdf" -> "My Slides.pdf" */
+const fileName = (path: string) => {
+  const last = path.split(/[?#]/)[0].split("/").filter(Boolean).pop() ?? path;
+  try {
+    return decodeURIComponent(last);
+  } catch {
+    return last;
+  }
+};
+const isPdf = (path: string) => /\.pdf($|[?#])/i.test(path);
 ---
 
 <Base title={title} description={description}>
@@ -67,6 +81,28 @@ const showUpdated = updated && formatDate(updated) !== formatDate(date);
 
     <section class="page__content">
       <slot />
+      {
+        attachments.length > 0 && (
+          <>
+            <h2>
+              <T {...UI.attachments} />
+            </h2>
+            <ul class="attachments">
+              {attachments.map(({ file, label }) => (
+                <li>
+                  <Icon name={isPdf(file) ? "pdf" : "file"} />{" "}
+                  <a
+                    href={file}
+                    download={file.startsWith("/") ? "" : undefined}
+                  >
+                    {label || fileName(file)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
     </section>
 
     {
