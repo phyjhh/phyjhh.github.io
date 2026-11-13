@@ -11,7 +11,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  # write: lets the build commit front matter it adds to new blog posts
+  contents: write
   pages: write
   id-token: write
 
@@ -22,6 +23,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,7 +37,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
 
       - name: Install dependencies
@@ -42,6 +45,20 @@ jobs:
 
       - name: Build
         run: pnpm run build
+
+      # Markdown files uploaded without front matter got a title and date in
+      # the build step (scripts/frontmatter.mjs). Commit them so the date stays
+      # fixed. Pushes made with the workflow token don't start another run.
+      - name: Save added front matter
+        continue-on-error: true
+        run: |
+          if [ -n "$(git status --porcelain -- src/content/blog)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/content/blog
+            git commit -m "Add front matter to new blog posts"
+            git push
+          fi
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

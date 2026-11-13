@@ -1,5 +1,9 @@
 name: CI
 
+# 强制 Action 底层使用 Node 24
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 permissions:
   contents: read
 
@@ -17,10 +21,12 @@ jobs:
     name: Code standards & build
     runs-on: ubuntu-latest
     timeout-minutes: 3
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     strategy:
       matrix:
-        node-version: [20]
+        node-version: [24]
 
     steps:
       - name: "☁️ Checkout repository"

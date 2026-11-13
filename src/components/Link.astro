@@ -1,0 +1,30 @@
+---
+/**
+ * A link with bilingual text. The inner HTML is built here so that formatting
+ * the template can never put whitespace inside the underline.
+ */
+import type { Bi } from "@/i18n";
+
+type Props = { href: string; label: Bi };
+
+const { href } = Astro.props;
+const zh = Astro.props.label.zh || Astro.props.label.en;
+const en = Astro.props.label.en || Astro.props.label.zh;
+
+const escape = (s: string) =>
+  s.replace(
+    /[&<>"']/g,
+    c =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+        c
+      ]!
+  );
+
+const inner =
+  zh === en
+    ? escape(zh)
+    : `<span class="zh" lang="zh-CN">${escape(zh)}</span>` +
+      `<span class="en" lang="en">${escape(en)}</span>`;
+---
+
+<a href={href} set:html={inner} />
