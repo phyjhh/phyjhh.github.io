@@ -1,0 +1,37 @@
+---
+/**
+ * Notes now live under /blog/. These pages keep the old /notes/... links
+ * working by sending visitors to the new address.
+ */
+import { getPosts } from "@/utils/content";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return [
+    { params: { slug: undefined }, props: { to: "/blog/" } },
+    ...posts.map(post => ({
+      params: { slug: post.id },
+      props: { to: `/blog/${post.id}/` },
+    })),
+  ];
+}
+
+type Props = { to: string };
+
+const { to } = Astro.props;
+const target = new URL(to, Astro.site);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting…</title>
+    <meta http-equiv="refresh" content={`0; url=${to}`} />
+    <link rel="canonical" href={target} />
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <a href={to}>{target}</a>
+  </body>
+</html>

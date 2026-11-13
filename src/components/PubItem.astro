@@ -1,0 +1,42 @@
+---
+/** A publication in a list, like AcademicPages' archive-single include. */
+import type { CollectionEntry } from "astro:content";
+import T from "@/components/T.astro";
+import { UI } from "@/i18n";
+import { citationOf, hasBody, yearOf } from "@/utils/content";
+
+type Props = { pub: CollectionEntry<"publications"> };
+
+const { pub } = Astro.props;
+const { data } = pub;
+const href = hasBody(pub) ? `/publications/${pub.id}/` : (data.pdf ?? data.doi);
+---
+
+<article class="archive__item">
+  <h2 class="archive__item-title">
+    {href ? <a href={href}>{data.title}</a> : data.title}
+  </h2>
+  <p>
+    <T {...UI.publishedIn} />
+    <em>{data.journal}</em>, {yearOf(data.pubDatetime)}
+  </p>
+  {data.description && <p class="archive__item-excerpt">{data.description}</p>}
+  <p>
+    <T {...UI.citation} />
+    {citationOf(pub)}
+    {
+      (data.pdf || data.doi) && (
+        <>
+          <br />
+          {data.pdf && (
+            <a href={data.pdf}>
+              <T {...UI.downloadPaper} />
+            </a>
+          )}
+          {data.pdf && data.doi && " | "}
+          {data.doi && <a href={data.doi}>DOI</a>}
+        </>
+      )
+    }
+  </p>
+</article>

@@ -1,0 +1,103 @@
+---
+import Masthead from "@/components/Masthead.astro";
+import Sidebar from "@/components/Sidebar.astro";
+import Footer from "@/components/Footer.astro";
+import { SITE } from "@/config";
+import type { Bi } from "@/i18n";
+import "@/styles/global.css";
+
+type Props = {
+  /** Page title. Bilingual titles follow the language switch. */
+  title?: string | Bi;
+  description?: string;
+  /** "page" for single pages, "archive" for wider list pages. */
+  layout?: "page" | "archive";
+};
+
+const { title, description = SITE.description, layout = "page" } = Astro.props;
+
+const withSite = (t: string) => (t ? `${t} · ${SITE.title}` : SITE.title);
+const titleZh = withSite(typeof title === "string" ? title : (title?.zh ?? ""));
+const titleEn = withSite(typeof title === "string" ? title : (title?.en ?? ""));
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html
+  lang="zh-CN"
+  data-lang="zh"
+  data-title-zh={titleZh}
+  data-title-en={titleEn}
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titleZh}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:title" content={titleZh} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="color-scheme" content="light dark" />
+    <script is:inline>
+      // Language and theme are set before first paint so nothing flickers.
+      (function () {
+        const d = document.documentElement;
+        const load = key => {
+          try {
+            return localStorage.getItem(key);
+          } catch {
+            return null; // storage blocked: fall back to defaults
+          }
+        };
+        const save = (key, value) => {
+          try {
+            localStorage.setItem(key, value);
+          } catch {
+            // storage blocked: the choice just is not remembered
+          }
+        };
+
+        window.setLang = function (lang, remember) {
+          d.dataset.lang = lang;
+          d.lang = lang === "zh" ? "zh-CN" : "en";
+          document.title =
+            lang === "zh" ? d.dataset.titleZh : d.dataset.titleEn;
+          if (remember) save("lang", lang);
+        };
+        let lang = load("lang");
+        if (lang !== "zh" && lang !== "en") {
+          lang = /^zh\b/i.test(navigator.language || "") ? "zh" : "en";
+        }
+        window.setLang(lang, false);
+
+        // No saved theme: follow the system setting (handled in CSS).
+        const theme = load("theme");
+        if (theme === "light" || theme === "dark") d.dataset.theme = theme;
+        window.toggleTheme = function () {
+          const current =
+            d.dataset.theme ||
+            (matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light");
+          const next = current === "dark" ? "light" : "dark";
+          d.dataset.theme = next;
+          save("theme", next);
+        };
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">跳到正文 / Skip to content</a>
+    <Masthead />
+    <div id="main">
+      <Sidebar />
+      <main class={layout} id="content">
+        <slot />
+      </main>
+    </div>
+    <Footer />
+  </body>
+</html>
